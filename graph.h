@@ -1,4 +1,8 @@
 /*
+** this file is part of a git repository licensed under the
+** 										GNU GPL LICENSE
+** whose integral text is part of the repository itself
+**
 ** header for graph related function
 ** graph are represented with adiacency lists
 **

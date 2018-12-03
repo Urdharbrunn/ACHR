@@ -1,4 +1,8 @@
 /*
+** this file is part of a git repository licensed under the
+** 										GNU GPL LICENSE
+** whose integral text is part of the repository itself
+**
 ** source for vector related function
 ** vector starts from 0 index
 ** as a rule, in function names type is omitted if integer

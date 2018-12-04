@@ -52,6 +52,26 @@ int extractHeap (int *H) { //debugged
 		swap(&H[i], &H[2*i]);
 	return (m);
 }
+
+int extractHeapSorting (int *H, int *P) { //debugged
+	int i = H[0]-1, m = H[1];
+	H[1] = H[i];
+	H[0]--;
+	i = 1;
+	while ( 2*i < H[0] && ( H[i] < H[2*i] || H[i] < H[2*i+1] ) ) {
+		if ( H[2*i] > H[2*i+1] ){
+			swap(&H[i], &H[2*i]);
+			i = 2*i;
+		}
+		else {
+			swap(&H[i], &H[2*i+1]);
+			i = 2*i+1;
+		}
+	}
+	if (2*i == H[0] && H[i] < H[2*1])
+		swap(&H[i], &H[2*i]);
+	return (m);
+}
 	
 int heapSort (int *X, int n) { //debugged
 	int *H = malloc(sizeof(int)*n), i, flag = 0;

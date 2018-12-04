@@ -96,7 +96,6 @@ void quickSortPriority (int *X, int *P, int k, int n);
 
 /*
  * applies selection sort
- * slightly optimized in the use of maxVector
  */
 void selectionSort (int *X, int n);
 

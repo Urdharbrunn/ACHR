@@ -71,6 +71,19 @@ int esp (int a, int n) { //debugged
 	return(p);
 }
 
+int eulerFunction (factor *p) { //debugged
+	int f = 1, t;
+	while (p) {
+		if (p->power != 1) {
+			t = esp(p->base, p->power-1);
+			f *= t * p->base - t;
+		} else
+			f *= p->base;
+		p = p->next;
+	}
+	return(f);
+}
+
 void exportFactorization (FILE *out, factor *f) { //debugged
 	if (!f)
 		fprintf(stderr, "!W exportFactorization: empty factorization\n");

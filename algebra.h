@@ -52,6 +52,13 @@ int divide (int a, int b);
 int esp (int a, int n);
 
 /*
+ * returns the euler's function for n
+ * uses the phi's moltiplicativity
+ * note: n must be factorized
+ */
+int eulerFunction (factor *p);
+
+/*
  * prints the factorization in out stream
  */
 void exportFactorization (FILE *out, factor *f);

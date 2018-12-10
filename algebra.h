@@ -1,9 +1,15 @@
 /*
+** this file is part of a git repository licensed under the
+**										GNU GPL LICENSE
+** whose integral text is part of the repository itself
+**
 ** header for basic algebra related function
 **
-** first started	12/11/2018 (with older materials)
-** version 0			12/11/2018
-** last updated		26/11/2018
+** first created	30/10/2018 (with older materials)
+** version 0			30/10/2018
+** last updated		10/12/2018
+**
+** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
 */
 

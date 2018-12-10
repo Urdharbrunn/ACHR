@@ -10,7 +10,7 @@
 **
 ** first created	26/10/2018 (with older materials)
 ** version 0			29/10/2018
-** last updated		26/11/2018
+** last updated		07/12/2018
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -58,6 +58,13 @@ void exportSubMatrix (FILE *output, int **X, int k, int h, int p, int q);
 void exportVector (FILE *output, int *A, int n);
 
 /*
+ * exports the int vector A of length n in output file
+ * A is printed from last element to first on a single line
+ * note: file must already be opened
+ */
+void exportReverseVector(FILE *output, int *A, int n);
+
+/*
  + deallocates the matrix X and its rows, if they has been allocated
  */
 int **freeMatrix (int **X, int n);
@@ -80,14 +87,14 @@ void importMatrix (FILE *input, int **X, int n, int m);
 void importVector (FILE *input, int *A, int n);
 
 /*
- * initializes the matrix X of n rows m column to 0
+ * initializes the matrix X of n rows m column to a
  */
-void initializeMatrix (int **X, int n, int m);
+void initializeMatrix (int **X, int n, int m, int a);
 
 /*
- * initializes the vector X of length n to 0
+ * initializes the vector X of length n to a
  */
-void initializeVector (int *X, int n);
+void initializeVector (int *X, int n, int a);
 
 /*
  * calculate Z = aX + bY, matrices of dimensions (n,m)

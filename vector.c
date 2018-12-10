@@ -8,9 +8,9 @@
 ** as a rule, in function names type is omitted if integer
 ** it should be allocateIntVector, allocateDoubleVector, etc
 **
-** first created 	26/10/2018 (with older materials)
+** first created	26/10/2018 (with older materials)
 ** version 0			29/10/2018
-** last updated		26/11/2018
+** last updated		07/12/2018
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -74,11 +74,19 @@ void exportSubMatrix (FILE *output, int **X, int k, int h, int p, int q) { //deb
 	return;
 }
 
+void exportReverseVector(FILE *output, int *A, int n) { //debugged
+	while (n)
+		fprintf(output, "%d\t", A[--n]);
+	fprintf(output, "\n");
+	return;
+}
+
+
 void exportVector (FILE *output, int *A, int n) { //debugged
 	int i;
 	for (i=0; i<n; i++)
 		fprintf (output, "%d\t", A[i]);
-	printf ("\n");
+	fprintf (output, "\n");
 	return;
 }
 
@@ -102,7 +110,7 @@ int *freeVector (int *X) { //debugged
 }
 
 void importMatrix ( FILE *input, int **X, int n, int m) { //debugged
-	int i,j;
+	int i;
 	for (i=0; i<n; i++)
 		importVector(input, X[i], m);
 	return;
@@ -115,17 +123,17 @@ void importVector (FILE *input, int *A, int n) { //debugged
 	return;
 }
 
-void initializeMatrix (int **X, int n, int m) { //debugged
+void initializeMatrix (int **X, int n, int m, int a) { //debugged
 	int i;
 	for (i=0; i < n; i++)
-		initializeVector(X[i], m);
+		initializeVector(X[i], m, a);
 	return;
 }
 
-void initializeVector (int *X, int n) { //debugged
+void initializeVector (int *X, int n, int a) { //debugged
 	int i;
 	for (i=0; i<n; i++)
-		X[i] = 0;
+		X[i] = a;
 	return;
 }
 
@@ -255,6 +263,6 @@ void transposeMatrix (int **X, int **Y, int n, int m) { //debugged
 int vectorVector (int *A, int *B, int n) { //debugged
 	int s = 0, i;
 	for (i=0; i < n; i++ )
-    s += A[i]*B[i];
-  return (s);
+		s += A[i]*B[i];
+	return (s);
 }

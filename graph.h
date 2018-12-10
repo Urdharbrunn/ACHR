@@ -22,7 +22,6 @@ typedef struct xnode {
   struct xnode *next;
 } node;
 
-
 /*
  *  struct for implementing fifo queues lists
  */

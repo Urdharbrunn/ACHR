@@ -5,6 +5,7 @@
 **
 ** header for graph related function
 ** graph are represented with adiacency lists
+** requires list.h and vector.h
 **
 ** first created  30/10/2018 (with older materials)
 ** version 0      30/10/2018

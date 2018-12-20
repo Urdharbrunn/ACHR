@@ -27,6 +27,8 @@ void bubbleSort (int *X, int n);
  */
 int extractHeap (int *H);
 
+int extractHeapSorting (int *H, int *P);
+
 /*
  * applies heap sort
  * returns 0 if failed to allocate the heap

@@ -10,7 +10,9 @@
 **
 ** first created	26/10/2018 (with older materials)
 ** version 0			29/10/2018
-** last updated		07/12/2018
+** last updated		20/12/2018
+**
+** function count -> 31
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -60,6 +62,25 @@ void copyVector (int *A, int *B, int n) { //debugged
 	return;
 }
 
+void deleteMatrix (int **X, int n) { //debugged
+	int i;
+	if (X) {
+		for (i=0; i < n; i++)
+			X[i] = freeVector(X[i]);
+		free(X);
+	} else
+		fprintf(stderr, "!W freeMatrix: requested NULL pointer deallocation\n");
+	return;
+}
+
+void deleteVector (int *X) { //debugged
+	if (X)
+		free(X);
+	else
+		fprintf(stderr, "!W freeVector: requested NULL pointer deallocation\n");
+	return;
+}
+
 void exportMatrix (FILE *output, int **X, int n, int m) { //debugged
 		int i;
 		for (i=0; i<n; i++)
@@ -81,32 +102,12 @@ void exportReverseVector(FILE *output, int *A, int n) { //debugged
 	return;
 }
 
-
 void exportVector (FILE *output, int *A, int n) { //debugged
 	int i;
 	for (i=0; i<n; i++)
 		fprintf (output, "%d\t", A[i]);
 	fprintf (output, "\n");
 	return;
-}
-
-int **freeMatrix (int **X, int n) { //debugged
-	int i;
-	if (X) {
-		for (i=0; i < n; i++)
-			X[i] = freeVector(X[i]);
-		free(X);
-	} else
-		fprintf(stderr, "!W freeMatrix: requested NULL pointer deallocation\n");
-	return (NULL);
-}
-
-int *freeVector (int *X) { //debugged
-	if (X)
-		free(X);
-	else
-		fprintf(stderr, "!W freeVector: requested NULL pointer deallocation\n");
-	return(NULL);
 }
 
 void importMatrix ( FILE *input, int **X, int n, int m) { //debugged
@@ -258,6 +259,13 @@ void transposeMatrix (int **X, int **Y, int n, int m) { //debugged
 		for (j = 0; j < m; j++)
 			Y[j][i] = X[i][j];
 	return;
+}
+
+double vectorMean (int *V, int n) {
+	int i, s = 0;
+	for (i=0; i<n; i++)
+		s += V[i];
+	return((double) s/n);
 }
 
 int vectorVector (int *A, int *B, int n) { //debugged

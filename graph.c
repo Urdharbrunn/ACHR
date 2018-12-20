@@ -8,7 +8,9 @@
 **
 ** first created	30/10/2018 (with older materials)
 ** version 0			30/10/2018
-** last updated		07/12/2018
+** last updated		20/12/2018
+**
+** function count -> 19
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -17,6 +19,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include "vector.h"
+#include "list.h"
 #include "graph.h"
 
 int addEdge(graph *G, int u, int v) { //debugged
@@ -31,53 +35,91 @@ int addEdge(graph *G, int u, int v) { //debugged
 	return(flag);
 }
 
+component *allocateComponent (int k) {
+	component *C = NULL;
+	C = malloc(sizeof(component));
+	if (!C)
+		fprintf(stderr, "!E allocateComponent: memory allocation error\n");
+	else {
+		C->size = 0;
+		C->V = NULL;
+		C->next = NULL;
+		C->info = k;
+	}
+	return(C);
+}
+
 graph *allocateGraph (void) { //debugged
 	graph *G = malloc(sizeof(graph));
 	if (!G)
 		fprintf(stderr, "!E allocateGraph: memory allocation error\n");
+	else {
+		G->C = NULL
+		G->V = NULL;
+		G->n = 0;
+	}
 	return (G);
 }
 
-queue *allocateQueue (void) { //debugged
-	queue *Q = malloc(sizeof(queue));
-	if (!Q)
-		fprintf(stderr, "!E allocateQueue: memory allocation error\n");
-	else {
-		Q->first = NULL;
-		Q->last = NULL;
-	}
-	return (Q);
-}
+component *BFSComponents (graph *G) {
+	int *colour = malloc(sizeof(int)*G->n), v, k = 0, flag = 1, r;
+	node *u = NULL;
+	queue Q;
+	component *C = NULL;
 
-node *copyListRecursive (node *p) { //debugged
-	node *q = NULL;
-	if (p) {
-		q = malloc(sizeof(node));
-		if (q) {
-			q->info = p->info;
-			q->next = copyListRecursive(p->next);
-			if (!q->next && p->next) {
-				free(q);
-				q = NULL;
+	if (!colour)
+		fprintf(stderr, "!E BFSComponent: vector allocation error\n");
+	else {
+		//initialization
+		for (v=0; v < G->n; v++)
+			colour[v] = 0;
+		Q.first = NULL;
+		Q.last = NULL;
+
+		//cycle on components
+		r = 0;
+		while (r < G->n && flag) {
+			if (!colour[r]) {
+				flag = push(&Q, r);
+				C = stackComponent(C, k++);
+
+				//BFS
+				printf("Starting BFS with root %d\n", r);
+				while (Q.first && flag && C) {
+					v = pop(&Q);
+					u = G->V[v];
+					while (u && flag) {
+						if (!colour[u->info]) {
+							colour[u->info] = 1;
+							C->V = stack(C->V, u->info);
+							if (!push(&Q, u->info) || !C->V)
+								flag = 0;
+							C->size++;
+						}
+						u = u->next;
+					}
+				}
 			}
-		} else
-				fprintf(stderr, "!E copyListRecursive: memory allocation error\n");
+			r++;
+		}
 	}
-	return (q);
+	if (!flag)
+		C = NULL;
+	return (C);
 }
 
-node* copyNode (node *p){ //debugged
-	node *q = malloc(sizeof(node));
-	if (!q)
-		fprintf(stderr, "!E stack: memory allocation error\n");
-	else {
-		q->info = p->info;
-		q->next = p->next;
+void deleteComponentList (component *list) {
+	component *c = list;
+	while (c != NULL) {
+		deleteList(c->vertex);
+		c = c->next;
+		free(list);
+		list = c;
 	}
-	return(q);
+	return;
 }
 
-int deleteEdge(graph *G, int u, int v) {
+int deleteEdge (graph *G, int u, int v) {
 	node *p = G->V[u], *q;
 	int flag = 0;
 
@@ -96,34 +138,43 @@ int deleteEdge(graph *G, int u, int v) {
 	return (flag);
 }
 
-node *deleteList (node *list) { //debugged
-	node *t;
-	while (list != NULL) {
-		t = list->next;
-		free (list);
-		list = t;
-	}
-	return (list);
-}
-
-void deleteNodeNext (node *p) { //debugged
-	node *t = NULL;
-	if(!p->next)
-		fprintf(stderr, "!W deleteNodeNext: requested deletion of NULL node\n");
+void deleteGraph (graph *G) {
+	if (!G)
+		fprintf(stderr, "!W freeGraph: reqeusted deletion of free memory!\n");
 	else {
-		t = p->next->next;
-		free(p->next);
-		p->next=t;
+		int i;
+		if (G->V) {
+			for (i=0; i<n; i++) {
+				if (G->V[i])
+					deleteList(G->V[i]);
+			}
+			free(G->V);
+		}
+		if (G->A)
+			deleteMatrix(G->A);
+		if (G->C)
+			deleteComponentList(G->C);
+		free(G);
 	}
 	return;
 }
 
-void exportGraph (graph *G, FILE *out) { //debugged
+void exportComponent (FILE *out, component *list) {
+	while (list) {
+		fprintf(out, "%d: ", list->info);
+		exportList(list->V, out);
+		list = list->next;
+	}
+	fprintf (out, "\n");
+}
+
+void exportGraph (FILE *out, graph *G) { //debugged
 	int i;
 	fprintf(out, "Numero di vertici del grafo: %d\n", G->n);
 	for (i=0; i < G->n; i++) {
 		fprintf(out, "%d -> ", i);
 		exportList(G->V[i], out);
+		fprintf(out, "\n");
 	}
 	fprintf(out, "\n");
 	return;
@@ -139,36 +190,21 @@ void exportSelfCompatibleGraph (graph *G, FILE *out) { //debugged
 	return;
 }
 
-void exportList (node *list, FILE *out) { //debugged
-	while (list) {
-		fprintf (out, "%d ", list->info);
-		list = list->next;
-	}
-	fprintf (out, "\n");
-	return;
-}
-
-void graphToMatrix (graph *G, int **M) {
+void graphToMatrix (graph *G) {
 	node *p = NULL;
 	int i;
 
 	for (i=0; i < G->n; i++) {
 		p = G->V[i];
 		while (p) {
-			M[i][p->info] = 1;
+			G->M[i][p->info] = 1;
 			p = p->next;
 		}
 	}
 	return;
 }
 
-node *goToLast (node *list){ //debugged
-	while (list->next)
-		list = list->next;
-	return(list);
-}
-
-int importGraph(graph *G, FILE *input) { //debugged
+int importGraph (graph *G, FILE *input) { //debugged
 	int i, m;
 	fscanf(input, "%d", &G->n);
 	G->V = malloc(G->n * sizeof(node*));
@@ -185,46 +221,6 @@ int importGraph(graph *G, FILE *input) { //debugged
 	return(m);
 }
 
-node *importQueue (queue *Q, int n, FILE *input) { //debugged
-	node *p = NULL;
-	p = malloc(sizeof(node));
-	if (!p)
-		fprintf(stderr, "!E importQueue: memory allocation error\n");
-	else if (n) {
-		fscanf (input, "%d", &p->info);
-		p->next = importQueue(Q, n-1, input);
-		if (!p->next && n > 1) {
-			fprintf(stderr, "!E importQueue: memory allocation error\n");
-			free(p);
-			p = NULL;
-		}
-	}
-	if (!n)
-		p = NULL;
-
-	if (n == 1)
-		Q->last = p;
-	return (p);
-}
-
-node *importStack (int n, FILE *input) { //debugged
-	node *s = NULL, *p;
-	int i;
-	for (i=0; i < n; i++) {
-		p = malloc(sizeof(node));
-		if (!p) {
-			fprintf(stderr, "!E importStack: memory allocation error\n");
-			free(s);
-			s = NULL;
-		} else {
-			fscanf (input, "%d", &p->info);
-			p->next = s;
-			s = p;
-		}
-	}
-	return (s);
-}
-
 int initializeGraph (graph *G, int n) { //debugged
 	int flag = 1, i;
 	G->V = malloc(n*sizeof(node*));
@@ -237,34 +233,6 @@ int initializeGraph (graph *G, int n) { //debugged
 			G->V[i] = NULL;
 	}
 	return(flag);
-}
-
-void insertNode (node *p, node *q) { //debugged
-	q->next = p->next;
-	p->next = q;
-	return;
-}
-
-node *invertList (node *list) { //debugged
-	node *t, *p = NULL;
-	while (list != NULL) {
-		t = list->next;
-		list->next = p;
-		p = list;
-		list = t;
-	}
-	return (p);
-}
-
-int listLength (node *list) { //debugged
-	node *p = list;
-	int length = 0;
-
-	while (p != NULL) {
-		length++;
-		p = p->next;
-	}
-	return (length);
 }
 
 int mathExportGraph (graph *G, char name[]) {
@@ -299,55 +267,18 @@ int mathExportGraph (graph *G, char name[]) {
 	return(flag);
 }
 
-int matrixToGraph (int **M, graph *G) { //debugged
+int matrixToGraph (graph *G) { //debugged
 	int i, j, flag;
 
 	for (i=0; i < G->n; i++) {
 		for (j=0; j < G->n; j++) {
-			if (M[i][j])
+			if (G->M[i][j])
 				flag = addEdge(G, i, j);
 			if (!flag) {
 				j = G->n;
 				i = G->n;
 				fprintf(stderr, "!E matrixToGraph: error adding edge\n");
 			}
-		}
-	}
-	return(flag);
-}
-
-int pop(queue *Q) { //debugged
-	int x = Q->first->info;
-	node *p;
-	
-	if (Q->first->next == NULL) {
-		free(Q->first);
-		Q->first = NULL;
-		Q->last = NULL;
-	} else {
-		p = Q->first;
-		Q->first = Q->first->next;
-		free(p);
-	}
-	return(x);
-}
-
-int push(queue *Q, int x) { //debugged
-	node *p;
-	int flag = 1;
-	p = malloc(sizeof(node));
-	if (!p) {
-		fprintf(stderr, "!E push: memory allocation error\n");
-		flag = 0;
-	} else {
-		p->info = x;
-		p->next = NULL;
-		if (Q->last == NULL){
-			Q->last = p;
-			Q->first = p;
-		} else {
-			Q->last->next = p;
-			Q->last = p;
 		}
 	}
 	return(flag);
@@ -382,77 +313,14 @@ int randomDigraph48(graph *G, double p) { //debugged
 	return(n);
 }
 
-node *randomList (int n, int a, int b) { //debugged
-	node *list = NULL, *p;
-	int i;
-
-	for (i=0; i < n; i++){
-		p = malloc(sizeof(node));
-		if (!p) {
-			fprintf(stderr, "!E randomList: memory allocation error\n");
-			deleteList(list);
-			list = NULL;
-		} else {
-			p->info = (rand()%(b-a+1))+a;
-			p->next = list;
-			list = p;
-		}
-	}
-	return(list);
-}
-
-node *search (node *list, int k) { //debugged
-	node *p = list, *flag = NULL;
-
-	while (p && !flag) {
-		if (p->info == k)
-			flag = p;
-		else
-			p = p->next;
-	}
-	return (flag);
-}
-
-node *searchDelete (node *list, int k) { //debugged
-	node *p = NULL;
-	while (list->info == k) {
-		p = list;
-		list = list->next;
-		free(p);
-	}
-	p = searchNext(list, k);
-	while (p) {
-		deleteNodeNext(p);
-		p = searchNext(list, k);
-	}
-	return(list);
-}
-
-node *searchNext (node *list, int k) { //debugged
-	node *p = list, *q = p, *flag = NULL;
-	int kIsFirst = 0;
-	if (p && p->info == k)
-		kIsFirst = 1;
-	else if (p)
-		p = p->next;
-	if (!kIsFirst) {
-		while (p && !flag) {
-			if (p->info == k)
-				flag = q;
-			else {
-				p = p->next;
-				q = q->next;
-			}
-		}
-	}
-	return (flag);
-}
-
-node *stack(node *list, int x) { //debugged
-	node *q;
-	q = malloc(sizeof(node));
-	if (!q)
+component *stackComponent (component *list, int x) { //debugged
+	component *q;
+	q = malloc(sizeof(component));
+	if (!q) {
+		deleteComponentList(list);
+		list = NULL;
 		fprintf(stderr, "!E stack: memory allocation error\n");
+	}
 	else {
 		q->info = x;
 		q->next = list;
@@ -461,7 +329,7 @@ node *stack(node *list, int x) { //debugged
 	return(list);
 }
 
-int transposeGraph(graph *G, graph *GT) { //debugged
+int transposeGraph (graph *G, graph *GT) { //debugged
 	int u, flag = 1;
 	node *p, *q;
 

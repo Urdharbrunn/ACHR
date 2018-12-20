@@ -10,7 +10,9 @@
 **
 ** first created	26/10/2018 (with older materials)
 ** version 0			29/10/2018
-** last updated		07/12/2018
+** last updated		20/12/2018
+**
+** function count -> 31
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -35,6 +37,16 @@ void copyMatrix (int **A, int **B, int n, int m);
  *  copies the int vector A into B of length n
  */
 void copyVector (int *A, int *B, int n);
+
+/*
+ * deallocates the matrix X and its rows, if they has been allocated
+ */
+void deleteMatrix (int **X, int n);
+
+/*
+ * deallocates the vector X, if it has been allocated
+ */
+void deleteVector (int *X);
 
 /*
  * exports the int matrix X of dimension (n,m) in output file
@@ -63,16 +75,6 @@ void exportVector (FILE *output, int *A, int n);
  * note: file must already be opened
  */
 void exportReverseVector(FILE *output, int *A, int n);
-
-/*
- + deallocates the matrix X and its rows, if they has been allocated
- */
-int **freeMatrix (int **X, int n);
-
-/*
- * deallocates the vector X, if it has been allocated
- */
-int *freeVector (int *X);
 
 /*
  * imports from input file nm integer ordered in matrix X
@@ -175,6 +177,11 @@ void swapRows (int **X, int k, int h);
  * note: be sure Y has dimensions (m,n)
  */
 void transposeMatrix (int **X, int **Y, int n, int m);
+
+/*
+ * returns the mean of a vector
+ */
+double vectorMean (int *V, int n);
 
 /*
  * returns the scalar product AB, vectors of length n

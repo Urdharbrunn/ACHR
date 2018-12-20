@@ -9,6 +9,8 @@
 ** version 0			30/10/2018
 ** last updated		10/12/2018
 **
+** function count -> 17
+**
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
 */

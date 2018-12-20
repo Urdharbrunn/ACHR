@@ -8,31 +8,34 @@
 **
 ** first created  30/10/2018 (with older materials)
 ** version 0      30/10/2018
-** last updated   03/12/2018
+** last updated   20/12/2018
+**
+** function count -> 19
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
 */
 
 /*
- * struct for implementing lists (stacks and queues)
+ * special node to represent the component of a graph
  */
-typedef struct xnode {
-  int info;
-  struct xnode *next;
-} node;
+typedef struct xcomponent {
+	int info;
+	int size;
+	node *vertex;
+	struct xcomponent *next;
+} component;
 
 /*
- *  struct for implementing fifo queues lists
+ * graph structure
+ * includes adiacency lists, adiacency matrix and list of components
+ * grpahs are supposed to be sparse, so adiacency matrix is not often used
  */
-typedef struct xqueue {
-  node *first;
-  node *last;
-} queue;
-
 typedef struct xgraph {
 	int n;
 	node **V;
+	int **A;
+	component *C;
 } graph;
 
 /*
@@ -44,25 +47,27 @@ typedef struct xgraph {
 int addEdge(graph *G, int u, int v);
 
 /*
+ * allocates memory for a component structure and returns pointer
+ * info's value is set to k
+ */
+component *allocateComponent (int k);
+
+/*
  * allocates memory for a graph structure and returns pointer
  */
 graph *allocateGraph (void);
 
 /*
- * allocates memory for a queue structure and returns pointer
+ * runs the BFS and constructs the connected components
+ * returns pointer to list of components or NULL if failed
  */
-queue *allocateQueue (void);
+component *BFSComponents (graph *G);
 
 /*
- * allocates memory and copy info and next of p
+ * frees memory deleting list
+ * returns NULL if everything went ok
  */
-node* copyNode (node *p);
-
-/*
- * returns the pointer to a list identical to list, ordering included
- * note: returns NULL if failed
- */
-node *copyListRecursive (node *list);
+void deleteComponentList (component *list);
 
 /*
  * deletes edge u->v from graph
@@ -72,35 +77,24 @@ node *copyListRecursive (node *list);
 int deleteEdge(graph *G, int u, int v);
 
 /*
- * deletes the list, freeing memory
- * returns list pointer, that should be NULL
+ * frees memory deleting graph G
  */
-node *deleteList (node *list);
+void deleteGraph (graph *G);
 
 /*
- * deletes the node p->next, freeing memory
+ * prints the components list in out stream
  */
-void deleteNodeNext (node *p);
+void exportComponent (FILE *out, component *list);
 
 /*
  * prints the graph in out stream
  */
-void exportGraph (graph *G, FILE *out);
+void exportGraph (FILE *out, graph *G);
 
 /*
  * prints the graph in a way readable for importGraph
  */
 void exportSelfCompatibleGraph (graph *G, FILE *out);
-
-/*
- * prints the list in out stream
- */
-void exportList (node *list, FILE *out);
-
-/*
- * returns pointer to last element of list
- */
-node *goToLast (node *list);
 
 /*
  * converts the adiacency list of G in the adiacency matrix M
@@ -117,40 +111,10 @@ void graphToMatrix (graph *G, int **M);
 int importGraph(graph *G, FILE *input);
 
 /*
- * imports a list of n integers with FIFO structure
- * returns the pointer to the first element or NULL if failed
- * note: saves also in Q->last the pointer to last element
- * note: the correct call is Q->first = importQueue (Q, n, input)
- */
-node *importQueue (queue *Q, int n, FILE *input);
-
-/*
- * imports a list of n integers with LIFO structure
- * returns the pointer to the stack or NULL if failed
- */
-node *importStack (int n, FILE *input);
-
-/*
  * allocates memory in G->V for n vertices
  * return 0 if error, 1 if ok
  */
 int initializeGraph (graph *G, int n);
-
-/*
- * insert node q after p
- */
-void insertNode (node *p, node *q);
-
-/*
- * reverse the ordering of the list
- * returns the pointer to the new first element
- */
-node *invertList (node *list);
-
-/*
- * return di number of element in list
- */
-int listLength (node *list);
 
 /*
  * opens files "name" in w mode
@@ -165,17 +129,6 @@ int mathExportGraph (graph *G, char name[]);
  * note: G MUST already be initialized
  */
 int matrixToGraph (int **M, graph *G);
-
-/*
- * return the info of the next (first) element of queue Q
- */
-int pop(queue *Q);
-
-/*
- * add a node in a FIFO queue
- * returns 1 in success, 0 in failing
- */
-int push(queue *Q, int x);
 
 /*
  * generates a random graph using drand48
@@ -196,35 +149,10 @@ int randomGraph48(graph *G, double p);
 int randomDigraph48(graph *G, double p);
 
 /*
- * generates a random list of n integer in (a,b) and returns pointer
- */
-node *randomList (int n, int a, int b);
-
-/*
- * verifies is k is in the list
- * return pointer to k in list, if present, or NULL
- */
-node *search (node *list, int k);
-
-/*
- * searches nodes with k info in list and deletes them
- * returns pointer to first element of the list
- */
-node *searchDelete (node *list, int k);
-
-/*
- * verifies if k is in the list
- * return pointer to node whose next is k or NULL
- * note: if the node whit k is the first, returns NULL as well
- */
-node *searchNext (node *list, int k);
-
-/*
  * add a node in a LIFO stack
- * returns modified stack pointer
- * note: if failes to allocate memory returns the same pointer and send error to stderr, nothing more
+ * returns modified stack pointer or NULL if failed
  */
-node *stack(node *list, int x);
+component *stackComponent(component *list, int x);
 
 /*
  * transpose the graph G in GT

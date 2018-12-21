@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include "list.h"
 
 queue *allocateQueue (void) { //debugged
 	queue *Q = malloc(sizeof(queue));

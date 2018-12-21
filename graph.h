@@ -9,9 +9,9 @@
 **
 ** first created  30/10/2018 (with older materials)
 ** version 0      30/10/2018
-** last updated   20/12/2018
+** last updated   21/12/2018
 **
-** function count -> 19
+** function count -> 20
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -30,7 +30,7 @@ typedef struct xcomponent {
 /*
  * graph structure
  * includes adiacency lists, adiacency matrix and list of components
- * grpahs are supposed to be sparse, so adiacency matrix is not often used
+ * graphs are supposed to be sparse, so adiacency matrix is not often used
  */
 typedef struct xgraph {
 	int n;
@@ -65,6 +65,12 @@ graph *allocateGraph (void);
 component *BFSComponents (graph *G);
 
 /*
+ * runs the BFS and constructs the father's vector
+ * returns pointer to vector or NULL if failed
+ */
+int *BFSTree (graph *G,int s);
+
+/*
  * frees memory deleting list
  * returns NULL if everything went ok
  */
@@ -75,7 +81,7 @@ void deleteComponentList (component *list);
  * return 1 if succeeded, 0 if (u,v) does not exists
  * note: does NOT delete v->u too
  */
-int deleteEdge(graph *G, int u, int v);
+int deleteEdge (graph *G, int u, int v);
 
 /*
  * frees memory deleting graph G
@@ -101,7 +107,7 @@ void exportSelfCompatibleGraph (graph *G, FILE *out);
  * converts the adiacency list of G in the adiacency matrix M
  * note: M MUST be already initialized
  */
-void graphToMatrix (graph *G, int **M);
+void graphToMatrix (graph *G);
 
 /*
  * imports a graph from input in G, that must be already allocated.
@@ -109,7 +115,7 @@ void graphToMatrix (graph *G, int **M);
  * note: input must be in the form
   	[# of vertices] [# of elements in list] [list] [#] [list] ...
  */
-int importGraph(graph *G, FILE *input);
+int importGraph (graph *G, FILE *input);
 
 /*
  * allocates memory in G->V for n vertices
@@ -129,7 +135,7 @@ int mathExportGraph (graph *G, char name[]);
  * returns 0 on error, 1 otherwise
  * note: G MUST already be initialized
  */
-int matrixToGraph (int **M, graph *G);
+int matrixToGraph (graph *G);
 
 /*
  * generates a random graph using drand48
@@ -138,7 +144,7 @@ int matrixToGraph (int **M, graph *G);
  * note: does NOT had loops
  * note: G MUST already be initialized
  */
-int randomGraph48(graph *G, double p);
+int randomGraph48 (graph *G, double p);
 
 /*
  * generates a random directed graph using drand48
@@ -147,17 +153,17 @@ int randomGraph48(graph *G, double p);
  * note: does NOT had loops
  * note: G MUST already be initialized
  */
-int randomDigraph48(graph *G, double p);
+int randomDigraph48 (graph *G, double p);
 
 /*
  * add a node in a LIFO stack
  * returns modified stack pointer or NULL if failed
  */
-component *stackComponent(component *list, int x);
+component *stackComponent (component *list, int x);
 
 /*
  * transpose the graph G in GT
  * return 1 if succeeded, 0 otherwise
  * note: GT must already be initialized
  */
-int transposeGraph(graph *G, graph *GT);
+int transposeGraph (graph *G, graph *GT);

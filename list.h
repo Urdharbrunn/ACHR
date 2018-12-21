@@ -101,13 +101,13 @@ int listLength (node *list);
 /*
  * return the info of the next (first) element of queue Q
  */
-int pop(queue *Q);
+int pop (queue *Q);
 
 /*
  * add a node in a FIFO queue
  * returns 1 in success, 0 in failing
  */
-int push(queue *Q, int x);
+int push (queue *Q, int x);
 
 /*
  * generates a random list of n integer in (a,b) and returns pointer

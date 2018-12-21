@@ -8,9 +8,9 @@
 **
 ** first created	30/10/2018 (with older materials)
 ** version 0			30/10/2018
-** last updated		20/12/2018
+** last updated		21/12/2018
 **
-** function count -> 19
+** function count -> 20
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -42,7 +42,7 @@ component *allocateComponent (int k) {
 		fprintf(stderr, "!E allocateComponent: memory allocation error\n");
 	else {
 		C->size = 0;
-		C->V = NULL;
+		C->vertex = NULL;
 		C->next = NULL;
 		C->info = k;
 	}
@@ -54,7 +54,7 @@ graph *allocateGraph (void) { //debugged
 	if (!G)
 		fprintf(stderr, "!E allocateGraph: memory allocation error\n");
 	else {
-		G->C = NULL
+		G->C = NULL;
 		G->V = NULL;
 		G->n = 0;
 	}
@@ -91,8 +91,8 @@ component *BFSComponents (graph *G) {
 					while (u && flag) {
 						if (!colour[u->info]) {
 							colour[u->info] = 1;
-							C->V = stack(C->V, u->info);
-							if (!push(&Q, u->info) || !C->V)
+							C->vertex = stack(C->vertex, u->info);
+							if (!push(&Q, u->info) || !C->vertex)
 								flag = 0;
 							C->size++;
 						}
@@ -106,6 +106,48 @@ component *BFSComponents (graph *G) {
 	if (!flag)
 		C = NULL;
 	return (C);
+}
+
+int *BFSTree (graph *G, int s) {
+	int *colour = NULL, *P = NULL, u;
+	node *v = NULL;
+	queue Q;
+
+	//initialization
+	colour = allocateVector(G->n);
+	P = allocateVector(G->n);
+	if (!colour || !P) {
+		P = NULL;
+	}
+
+	Q.first = NULL;
+	Q.last = NULL;
+
+	if (!push(&Q, s))
+		P = NULL;
+
+	if (P) { //all went ok
+		initializeVector(colour, G->n, 0);
+		initializeVector(P, G->n, -1);
+		colour[s] = 1;
+		while (Q.first && P) {
+			u = pop(&Q);
+			v = G->V[u];
+			while (v && P) {
+				if (!colour[v->info]) {
+					colour[v->info] = 1;
+					P[v->info] = u;
+					if (!push(&Q, v->info)) {
+						deleteVector(P);
+						P = NULL;
+					}
+					v = v->next;
+				}
+			}
+		}
+
+	}
+	return (P);
 }
 
 void deleteComponentList (component *list) {
@@ -144,14 +186,14 @@ void deleteGraph (graph *G) {
 	else {
 		int i;
 		if (G->V) {
-			for (i=0; i<n; i++) {
+			for (i=0; i < G->n; i++) {
 				if (G->V[i])
 					deleteList(G->V[i]);
 			}
 			free(G->V);
 		}
 		if (G->A)
-			deleteMatrix(G->A);
+			deleteMatrix(G->A, G->n);
 		if (G->C)
 			deleteComponentList(G->C);
 		free(G);
@@ -162,7 +204,7 @@ void deleteGraph (graph *G) {
 void exportComponent (FILE *out, component *list) {
 	while (list) {
 		fprintf(out, "%d: ", list->info);
-		exportList(list->V, out);
+		exportList(list->vertex, out);
 		list = list->next;
 	}
 	fprintf (out, "\n");
@@ -197,7 +239,7 @@ void graphToMatrix (graph *G) {
 	for (i=0; i < G->n; i++) {
 		p = G->V[i];
 		while (p) {
-			G->M[i][p->info] = 1;
+			G->A[i][p->info] = 1;
 			p = p->next;
 		}
 	}
@@ -237,29 +279,25 @@ int initializeGraph (graph *G, int n) { //debugged
 
 int mathExportGraph (graph *G, char name[]) {
 	int i, flag;
-	FILE *out;
-	node *p;
+	FILE *out = NULL;
+	node *p = NULL;
 
-	scanf("%s", name);
 	out = fopen(name, "w");
 	if (!out) {
 		fprintf(stderr, "!E mathExport: error opening file %s in write mode\n", name);
 		flag = 0;
 	}
 	else {
-		fprintf(out, "{");
+		fprintf(out, "graph {\n");
+		for (i=0; i < G->n; i++)
+			fprintf(out, "%d\n", i);
 		for (i=0; i < G->n; i++) {
 			p = G->V[i];
-			fprintf(out, "{");
 			while (p) {
-				fprintf(out, "%d", p->info);
+				if (p->info > i)
+					fprintf(out, "%d -- %d;\n", i, p->info);
 				p = p->next;
-				if (p) 
-					fprintf(out, ",");
 			}
-			fprintf(out, "}");
-			if (i < G->n)
-				fprintf(out, ", ");
 		}
 		fprintf(out, "}\n");
 		fclose(out);
@@ -272,7 +310,7 @@ int matrixToGraph (graph *G) { //debugged
 
 	for (i=0; i < G->n; i++) {
 		for (j=0; j < G->n; j++) {
-			if (G->M[i][j])
+			if (G->A[i][j])
 				flag = addEdge(G, i, j);
 			if (!flag) {
 				j = G->n;
@@ -284,23 +322,21 @@ int matrixToGraph (graph *G) { //debugged
 	return(flag);
 }
 
-int randomGraph48(graph *G, double p) { //debugged
+int randomGraph48 (graph *G, double p) { //debugged
 	int i, j, n = G->n;
 
 	for (i=0; i < n; i++) {
-		for (j=i; j < n; j++) {
+		for (j = i+1; j < n; j++) {
 			if (drand48() < p) {
-				if (i!=j) {
-					addEdge(G, i, j);
-					addEdge(G, j, i);
-				}
+				addEdge(G, i, j);
+				addEdge(G, j, i);
 			}
 		}
 	}
 	return(n);
 }
 
-int randomDigraph48(graph *G, double p) { //debugged
+int randomDigraph48 (graph *G, double p) { //debugged
 	int i, j, n = G->n;
 
 	for (i=0; i < n; i++) {

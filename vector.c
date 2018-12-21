@@ -34,7 +34,7 @@ int **allocateMatrix (int n, int m) { //debugged
 			X[++i] = allocateVector(m);
 			if (!X[i]) {
 				fprintf(stderr, "!E allocateMatrix: memory allocation error\n");
-				freeMatrix(X, n);
+				deleteMatrix(X, n);
 			}
 		}
 	}
@@ -66,10 +66,10 @@ void deleteMatrix (int **X, int n) { //debugged
 	int i;
 	if (X) {
 		for (i=0; i < n; i++)
-			X[i] = freeVector(X[i]);
+			deleteVector(X[i]);
 		free(X);
 	} else
-		fprintf(stderr, "!W freeMatrix: requested NULL pointer deallocation\n");
+		fprintf(stderr, "!W deleteMatrix: requested NULL pointer deallocation\n");
 	return;
 }
 
@@ -77,7 +77,7 @@ void deleteVector (int *X) { //debugged
 	if (X)
 		free(X);
 	else
-		fprintf(stderr, "!W freeVector: requested NULL pointer deallocation\n");
+		fprintf(stderr, "!W deleteVector: requested NULL pointer deallocation\n");
 	return;
 }
 

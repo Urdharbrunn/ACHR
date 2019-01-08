@@ -7,9 +7,9 @@
 **
 ** first created	20/12/2018 (with older materials)
 ** version 0			20/12/2018
-** last updated		20/12/2018
+** last updated		08/01/2019
 
-** function count -> 19
+** function count -> 20
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -87,6 +87,15 @@ void exportList (node *list, FILE *out) { //debugged
 		list = list->next;
 	}
 	fprintf (out, "\n");
+	return;
+}
+
+void exportListTerminator (node *list, FILE *out) { //debugged
+	while (list) {
+		fprintf (out, "%d ", list->info);
+		list = list->next;
+	}
+	fprintf (out, "-1\n");
 	return;
 }
 

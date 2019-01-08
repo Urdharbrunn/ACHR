@@ -9,9 +9,9 @@
 **
 ** first created  30/10/2018 (with older materials)
 ** version 0      30/10/2018
-** last updated   21/12/2018
+** last updated   08/01/2019
 **
-** function count -> 20
+** function count -> 21
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -95,13 +95,15 @@ void exportComponent (FILE *out, component *list);
 
 /*
  * prints the graph in out stream
+ * output is compatible with importGraphTerminator
  */
-void exportGraph (FILE *out, graph *G);
+void exportGraphTerminator (FILE *out, graph *G);
 
 /*
- * prints the graph in a way readable for importGraph
+ * prints the graph in out stream
+ * output is compatible with importGraph
  */
-void exportSelfCompatibleGraph (graph *G, FILE *out);
+void exportGraph (FILE *out, graph *G);
 
 /*
  * converts the adiacency list of G in the adiacency matrix M
@@ -115,7 +117,18 @@ void graphToMatrix (graph *G);
  * note: input must be in the form
   	[# of vertices] [# of elements in list] [list] [#] [list] ...
  */
-int importGraph (graph *G, FILE *input);
+int importGraph (FILE *input, graph *G);
+
+/*
+ * imports a graph from input in G, that must be already allocated.
+ * returns 1 if successfull, 0 otherwise
+ * note: input must be in the form
+  	[# of vertices]
+  	[vertex]: [list] -1
+  	[vertex]: [list] -1
+  	...
+ */
+int importGraphTerminator (FILE *input, graph *G);
 
 /*
  * allocates memory in G->V for n vertices

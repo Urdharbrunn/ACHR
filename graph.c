@@ -8,9 +8,9 @@
 **
 ** first created	30/10/2018 (with older materials)
 ** version 0			30/10/2018
-** last updated		21/12/2018
+** last updated		08/01/2019
 **
-** function count -> 20
+** function count -> 21
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -201,6 +201,11 @@ void deleteGraph (graph *G) {
 	return;
 }
 
+/*void deleteNode (graph *G, int u) {
+	cancellare
+
+}*/
+
 void exportComponent (FILE *out, component *list) {
 	while (list) {
 		fprintf(out, "%d: ", list->info);
@@ -210,19 +215,18 @@ void exportComponent (FILE *out, component *list) {
 	fprintf (out, "\n");
 }
 
-void exportGraph (FILE *out, graph *G) { //debugged
+void exportGraphTerminator (FILE *out, graph *G) { //debugged
 	int i;
-	fprintf(out, "Numero di vertici del grafo: %d\n", G->n);
+	fprintf(out, "%d\n", G->n);
 	for (i=0; i < G->n; i++) {
-		fprintf(out, "%d -> ", i);
-		exportList(G->V[i], out);
-		fprintf(out, "\n");
+		fprintf(out, "%d: ", i);
+		exportListTerminator(G->V[i], out);
 	}
 	fprintf(out, "\n");
 	return;
 }
 
-void exportSelfCompatibleGraph (graph *G, FILE *out) { //debugged
+void exportGraph (FILE *out, graph *G) { //debugged
 	int i;
 	fprintf(out, "%d\n", G->n);
 	for (i=0; i < G->n; i++) {
@@ -246,14 +250,13 @@ void graphToMatrix (graph *G) {
 	return;
 }
 
-int importGraph (graph *G, FILE *input) { //debugged
-	int i, m;
+int importGraph (FILE *input, graph *G) { //debugged
+	int i, m = 0;
 	fscanf(input, "%d", &G->n);
 	G->V = malloc(G->n * sizeof(node*));
-	if (!G->V) {
+	if (!G->V)
 		fprintf(stderr, "!E importGraph: memory allocation error\n");
-		m = 0;
-	} else {
+	else {
 		for (i=0; i < G->n; i++) {
 			fscanf(input, "%d", &m);
 			G->V[i] = importStack(m, input);
@@ -261,6 +264,26 @@ int importGraph (graph *G, FILE *input) { //debugged
 		m = 1;
 	}
 	return(m);
+}
+
+int importGraphTerminator (FILE *input, graph *G) { //debugged
+	int i, v = 0, x;
+	fscanf(input, "%d", &G->n);
+
+	if (initializeGraph(G, G->n)) {
+		for (i=0; i < G->n; i++) {
+			fscanf(input, "%d:", &v);
+			if (v != i)
+				fprintf(stderr, "!W importGraph2: vertices not in order\n");
+			fscanf(input, "%d", &x);
+			while (x != -1) {
+				addEdge(G, v, x);
+				fscanf(input, "%d", &x);
+			}
+		}
+		v = 1;
+	}
+	return(v);
 }
 
 int initializeGraph (graph *G, int n) { //debugged
@@ -277,7 +300,7 @@ int initializeGraph (graph *G, int n) { //debugged
 	return(flag);
 }
 
-int mathExportGraph (graph *G, char name[]) {
+int mathExportGraph (graph *G, char name[]) { //debugged
 	int i, flag;
 	FILE *out = NULL;
 	node *p = NULL;

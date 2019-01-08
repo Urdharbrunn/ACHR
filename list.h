@@ -7,9 +7,9 @@
 **
 ** first created	20/12/2018 (with older materials)
 ** version 0			20/12/2018
-** last updated		20/12/2018
+** last updated		08/01/2019
 **
-** function count -> 19
+** function count -> 20
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -62,6 +62,11 @@ void deleteNodeNext (node *p);
  * prints the list in out stream
  */
 void exportList (node *list, FILE *out);
+
+/*
+ * prints the list in out stream and terminates it with -1
+ */
+void exportListTerminator (node *list, FILE *out);
 
 /*
  * returns pointer to last element of list

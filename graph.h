@@ -69,7 +69,7 @@ int BFSComponents (graph *G);
  * runs the BFS and constructs the father's vector
  * returns pointer to vector or NULL if failed
  */
-int *BFSTree (graph *G,int s);
+int *BFSTree (graph *G, int s);
 
 /*
  * frees memory deleting list
@@ -116,7 +116,7 @@ void exportGraph (FILE *out, graph *G);
 
 /*
  * converts the adiacency list of G in the adiacency matrix M
- * note: A MUST be already initialized
+ * note: A MUST be already initialized (not only allocated)
  */
 void graphToMatrix (graph *G, int **A);
 

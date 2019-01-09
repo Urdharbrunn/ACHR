@@ -118,7 +118,7 @@ int BFSComponents (graph *G) { //debugged
 	return (flag);
 }
 
-/*int *BFSTree (graph *G, int s) {
+int *BFSTree (graph *G, int s) { //debugged
 	int *colour = NULL, *P = NULL, u;
 	node *v = NULL;
 	queue Q;
@@ -133,8 +133,10 @@ int BFSComponents (graph *G) { //debugged
 	Q.first = NULL;
 	Q.last = NULL;
 
-	if (!push(&Q, s))
+	if (!push(&Q, s)) {
+		deleteVector(P);
 		P = NULL;
+	}
 
 	if (P) { //all went ok
 		initializeVector(colour, G->n, 0);
@@ -151,14 +153,14 @@ int BFSComponents (graph *G) { //debugged
 						deleteVector(P);
 						P = NULL;
 					}
-					v = v->next;
 				}
+				v = v->next;
 			}
 		}
 
 	}
 	return (P);
-}*/
+}
 
 void deleteComponentList (component *list) { //debugged
 	component *c = list;
@@ -304,7 +306,7 @@ int importGraphTerminator (FILE *input, graph *G) { //debugged
 		for (i=0; i < G->n; i++) {
 			fscanf(input, "%d:", &v);
 			if (v != i)
-				fprintf(stderr, "!W importGraph2: vertices not in order\n");
+				fprintf(stderr, "!W importGraphTerminator: vertices not in order\n");
 			fscanf(input, "%d", &x);
 			while (x != -1) {
 				addEdge(G, v, x);

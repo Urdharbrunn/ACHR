@@ -9,7 +9,7 @@
 ** version 0			20/12/2018
 ** last updated		08/01/2019
 **
-** function count -> 20
+** function count -> 21
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -126,15 +126,21 @@ node *randomList (int n, int a, int b);
 node *search (node *list, int k);
 
 /*
- * searches nodes with k info in list and deletes them
+ * searches a node with k info in list and delete it
  * returns pointer to first element of the list
  */
 node *searchDelete (node *list, int k);
 
 /*
+ * searches nodes with k info in list and deletes them
+ * returns pointer to first element of the list
+ */
+node *searchDeleteAll (node *list, int k);
+
+/*
  * verifies if k is in the list
  * return pointer to node whose next is k or NULL
- * note: if the node whit k is the first, returns NULL as well
+ * note: if the node with k is the first, returns NULL as well
  */
 node *searchNext (node *list, int k);
 

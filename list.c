@@ -61,7 +61,7 @@ node* copyNode (node *p){ //debugged
 
 node *deleteList (node *list) { //debugged
 	node *t;
-	while (list != NULL) {
+	while (list) {
 		t = list->next;
 		free (list);
 		list = t;
@@ -243,6 +243,20 @@ node *search (node *list, int k) { //debugged
 
 node *searchDelete (node *list, int k) { //debugged
 	node *p = NULL;
+	if (list && list->info == k) {
+		p = list;
+		list = list->next;
+		free(p);
+	} else {
+		p = searchNext(list, k);
+		if (p)
+			deleteNodeNext(p);
+	}
+	return(list);
+}
+
+node *searchDeleteAll (node *list, int k) { //debugged
+	node *p = NULL;
 	while (list->info == k) {
 		p = list;
 		list = list->next;
@@ -258,13 +272,10 @@ node *searchDelete (node *list, int k) { //debugged
 
 node *searchNext (node *list, int k) { //debugged
 	node *p = list, *q = p, *flag = NULL;
-	int kIsFirst = 0;
 	if (p && p->info == k)
-		kIsFirst = 1;
-	else if (p)
-		p = p->next;
-	if (!kIsFirst) {
-		while (p && !flag) {
+		flag = NULL;
+	else if (p) {
+		while (p->next && !flag) {
 			if (p->info == k)
 				flag = q;
 			else {

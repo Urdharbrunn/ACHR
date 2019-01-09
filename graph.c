@@ -35,7 +35,7 @@ int addEdge(graph *G, int u, int v) { //debugged
 	return(flag);
 }
 
-component *allocateComponent (int k) {
+component *allocateComponent (int k) { //debugged
 	component *C = NULL;
 	C = malloc(sizeof(component));
 	if (!C)
@@ -61,11 +61,16 @@ graph *allocateGraph (void) { //debugged
 	return (G);
 }
 
-component *BFSComponents (graph *G) {
+int BFSComponents (graph *G) { //debugged
 	int *colour = malloc(sizeof(int)*G->n), v, k = 0, flag = 1, r;
 	node *u = NULL;
 	queue Q;
-	component *C = NULL;
+	component *H = NULL;
+
+	if (G->C)
+		deleteComponentList(G->C);
+	G->C = NULL;
+	G->nC = 0;
 
 	if (!colour)
 		fprintf(stderr, "!E BFSComponent: vector allocation error\n");
@@ -81,20 +86,24 @@ component *BFSComponents (graph *G) {
 		while (r < G->n && flag) {
 			if (!colour[r]) {
 				flag = push(&Q, r);
-				C = stackComponent(C, k++);
+				H = stackComponent(H, k++);
+				if (H) {
+					H->vertex = stack(H->vertex, r);
+					H->size++;
+				}
+				G->nC++;
 
 				//BFS
-				printf("Starting BFS with root %d\n", r);
-				while (Q.first && flag && C) {
+				while (Q.first && flag && H) {
 					v = pop(&Q);
 					u = G->V[v];
 					while (u && flag) {
 						if (!colour[u->info]) {
 							colour[u->info] = 1;
-							C->vertex = stack(C->vertex, u->info);
-							if (!push(&Q, u->info) || !C->vertex)
+							H->vertex = stack(H->vertex, u->info);
+							if (!push(&Q, u->info) || !H->vertex)
 								flag = 0;
-							C->size++;
+							H->size++;
 						}
 						u = u->next;
 					}
@@ -104,11 +113,12 @@ component *BFSComponents (graph *G) {
 		}
 	}
 	if (!flag)
-		C = NULL;
-	return (C);
+		H = NULL;
+	G->C = H;
+	return (flag);
 }
 
-int *BFSTree (graph *G, int s) {
+/*int *BFSTree (graph *G, int s) {
 	int *colour = NULL, *P = NULL, u;
 	node *v = NULL;
 	queue Q;
@@ -148,11 +158,11 @@ int *BFSTree (graph *G, int s) {
 
 	}
 	return (P);
-}
+}*/
 
-void deleteComponentList (component *list) {
+void deleteComponentList (component *list) { //debugged
 	component *c = list;
-	while (c != NULL) {
+	while (c) {
 		deleteList(c->vertex);
 		c = c->next;
 		free(list);
@@ -180,7 +190,7 @@ int deleteEdge (graph *G, int u, int v) {
 	return (flag);
 }
 
-void deleteGraph (graph *G) {
+void deleteGraph (graph *G) { 
 	if (!G)
 		fprintf(stderr, "!W freeGraph: reqeusted deletion of free memory!\n");
 	else {
@@ -201,18 +211,38 @@ void deleteGraph (graph *G) {
 	return;
 }
 
-/*void deleteNode (graph *G, int u) {
-	cancellare
+void deleteNode (graph *G, int u) { //debugged
+	int v;
 
-}*/
+	//delete u from every adiacency list
+	for (v = 0; v < G->n; v++)
+		G->V[v] = searchDelete(G->V[v], u);
 
-void exportComponent (FILE *out, component *list) {
+	//delete G_u list
+	G->V[u] = deleteList(G->V[u]);
+
+	//update connected component
+	if (G->C)
+		BFSComponents(G);
+
+	//remove u from matrix
+	if (G->A) {
+		initializeVector(G->A[u], G->n, 0);
+		for (v=0; v < G->n; v++)
+			G->A[v][u] = 0;
+	}
+
+	return;
+}
+
+void exportComponent (FILE *out, component *list) { //debugged
 	while (list) {
-		fprintf(out, "%d: ", list->info);
+		fprintf(out, "Component %d has %d vertex: ", list->info, list->size);
 		exportList(list->vertex, out);
 		list = list->next;
 	}
 	fprintf (out, "\n");
+	return;
 }
 
 void exportGraphTerminator (FILE *out, graph *G) { //debugged
@@ -236,14 +266,14 @@ void exportGraph (FILE *out, graph *G) { //debugged
 	return;
 }
 
-void graphToMatrix (graph *G) {
+void graphToMatrix (graph *G, int **A) { //debugged
 	node *p = NULL;
 	int i;
 
 	for (i=0; i < G->n; i++) {
 		p = G->V[i];
 		while (p) {
-			G->A[i][p->info] = 1;
+			A[i][p->info] = 1;
 			p = p->next;
 		}
 	}
@@ -294,6 +324,7 @@ int initializeGraph (graph *G, int n) { //debugged
 		flag = 0;
 	} else {
 		G->n = n;
+		G->nC = -1;
 		for (i=0; i < n; i++)
 			G->V[i] = NULL;
 	}
@@ -307,7 +338,7 @@ int mathExportGraph (graph *G, char name[]) { //debugged
 
 	out = fopen(name, "w");
 	if (!out) {
-		fprintf(stderr, "!E mathExport: error opening file %s in write mode\n", name);
+		fprintf(stderr, "!E mathExportGraph: error opening file %s in write mode\n", name);
 		flag = 0;
 	}
 	else {
@@ -328,12 +359,12 @@ int mathExportGraph (graph *G, char name[]) { //debugged
 	return(flag);
 }
 
-int matrixToGraph (graph *G) { //debugged
+int matrixToGraph (int **A, graph *G) { //debugged
 	int i, j, flag;
 
 	for (i=0; i < G->n; i++) {
 		for (j=0; j < G->n; j++) {
-			if (G->A[i][j])
+			if (A[i][j])
 				flag = addEdge(G, i, j);
 			if (!flag) {
 				j = G->n;
@@ -373,7 +404,7 @@ int randomDigraph48 (graph *G, double p) { //debugged
 }
 
 component *stackComponent (component *list, int x) { //debugged
-	component *q;
+	component *q = NULL;
 	q = malloc(sizeof(component));
 	if (!q) {
 		deleteComponentList(list);
@@ -383,6 +414,8 @@ component *stackComponent (component *list, int x) { //debugged
 	else {
 		q->info = x;
 		q->next = list;
+		q->size = 0;
+		q->vertex = NULL;
 		list = q;
 	}
 	return(list);

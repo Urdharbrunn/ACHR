@@ -37,12 +37,13 @@ typedef struct xgraph {
 	node **V;
 	int **A;
 	component *C;
+	int nC;
 } graph;
 
 /*
  * adds the edge u->v
  * return 1 in success, 0 otherwise
- * note: controls if u, v are in V, but don't if (u,v) already exists
+ * note: controls if u, v are in V, but not if (u,v) already exists
  * note: does NOT add the edge v->u too
  */
 int addEdge(graph *G, int u, int v);
@@ -60,9 +61,9 @@ graph *allocateGraph (void);
 
 /*
  * runs the BFS and constructs the connected components
- * returns pointer to list of components or NULL if failed
+ * returns 0 if failed 1 otherwise
  */
-component *BFSComponents (graph *G);
+int BFSComponents (graph *G);
 
 /*
  * runs the BFS and constructs the father's vector
@@ -89,6 +90,14 @@ int deleteEdge (graph *G, int u, int v);
 void deleteGraph (graph *G);
 
 /*
+ * deletes node u from graph G
+ * frees u's list and removes it from other lists
+ * updates the adiacency matrix (if present)
+ * updates the connected component by recalculating with BFSComponents
+ */
+void deleteNode (graph *G, int u);
+
+/*
  * prints the components list in out stream
  */
 void exportComponent (FILE *out, component *list);
@@ -107,9 +116,9 @@ void exportGraph (FILE *out, graph *G);
 
 /*
  * converts the adiacency list of G in the adiacency matrix M
- * note: M MUST be already initialized
+ * note: A MUST be already initialized
  */
-void graphToMatrix (graph *G);
+void graphToMatrix (graph *G, int **A);
 
 /*
  * imports a graph from input in G, that must be already allocated.
@@ -148,7 +157,7 @@ int mathExportGraph (graph *G, char name[]);
  * returns 0 on error, 1 otherwise
  * note: G MUST already be initialized
  */
-int matrixToGraph (graph *G);
+int matrixToGraph (int **A, graph *G);
 
 /*
  * generates a random graph using drand48

@@ -5,16 +5,18 @@
 **
 ** this file contains a list in alphabetical order grouped by library
 ** of function interfaces and type definitions for all the ACHR project
-** at the current state it does include:
+**
+** at the current state this does include:
 **
 ** algebra.h
 ** graph.h
+** list.h
 ** sort.h
 ** vector.h
 **
 ** first created	07/12/2018 (with older materials)
 ** version 0			07/12/2018
-** last updated		20/12/2018
+** last updated		08/01/2019
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -40,6 +42,7 @@ typedef struct xqueue {
 typedef struct xgraph {
 	int n;
 	node **V;
+	int **A;
 	component *C;
 } graph;
 
@@ -74,49 +77,56 @@ int lcm (int a, int b);
 int lengthInBase (int x, int b);
 int tenToBase (int x, int b, int *A);
 
+//algorithm.h
+//function count -> 0
+
 //graph.h
-//function count -> 19
-int addEdge(graph *G, int u, int v);
-component *allocateComponent(int k);
+//function count -> 21
+int addEdge (graph *G, int u, int v);
+component *allocateComponent (int k);
 graph *allocateGraph (void);
-component *BFSComponents (graph *G);
+int BFSComponents (graph *G);
+int *BFSTree (graph *G, int s);
 void deleteComponentList (component *list);
-int deleteEdge(graph *G, int u, int v);
-void deleteGraph(graph *G);
-void deleteComponentList(component *list);
+int deleteEdge (graph *G, int u, int v);
+void deleteGraph (graph *G);
+void deleteNode (graph *G, int u);
 void exportComponent (FILE *out, component *list);
 void exportGraph (FILE *out, graph *G);
 void exportSelfCompatibleGraph (graph *G, FILE *out);
-void graphToMatrix (graph *G, int **M);
-int importGraph(graph *G, FILE *input);
+void graphToMatrix (graph *G, int **A);
+int importGraph (FILE *input, graph *G);
+int importGraphTerminator (FILE *input, graph *G);
 int initializeGraph (graph *G, int n);
 int mathExportGraph (graph *G, char name[]);
-int matrixToGraph (int **M, graph *G);
-int randomGraph48(graph *G, double p);
-int randomDigraph48(graph *G, double p);
-int transposeGraph(graph *G, graph *GT);
+int matrixToGraph (int **A, graph *G);
+int randomGraph48 (graph *G, double p);
+int randomDigraph48 (graph *G, double p);
+int transposeGraph (graph *G, graph *GT);
 
 //list.h
-//function count -> 19
+//function count -> 21
 queue *allocateQueue (void);
 node* copyNode (node *p);
 node *copyListRecursive (node *list);
 node *deleteList (node *list);
 void deleteNodeNext (node *p);
 void exportList (node *list, FILE *out);
+void exportListTerminator (node *list, FILE *out);
 node *goToLast (node *list);
 node *importQueue (queue *Q, int n, FILE *input);
 node *importStack (int n, FILE *input);
 void insertNode (node *p, node *q);
 node *invertList (node *list);
 int listLength (node *list);
-int pop(queue *Q);
-int push(queue *Q, int x);
+int pop (queue *Q);
+int push (queue *Q, int x);
 node *randomList (int n, int a, int b);
 node *search (node *list, int k);
 node *searchDelete (node *list, int k);
+node *searchDeleteAll (node *list, int k);
 node *searchNext (node *list, int k);
-node *stack(node *list, int x);
+node *stack (node *list, int x);
 
 //sort.h
 // function count -> 15

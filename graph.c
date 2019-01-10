@@ -141,6 +141,7 @@ int BFSComponents (graph *G) { //debugged
 			if (!colour[r]) {
 				flag = push(&Q, r);
 				H = stackComponent(H, r);
+				colour[r] = 1;
 				if (H) {
 					H->vertex = stack(H->vertex, r);
 					H->size++;
@@ -349,6 +350,37 @@ void exportComponent (FILE *out, component *list) { //debugged
 	return;
 }
 
+void exportGraph (FILE *out, graph *G) { //debugged
+	int i;
+	fprintf(out, "%d\n", G->n);
+	for (i=0; i < G->n; i++) {
+		fprintf(out, "%d\t", listLength(G->V[i]));
+		exportList(G->V[i], out);
+	}
+	return;
+}
+
+void exportGraphComplete (FILE *out, graph *G) {
+	int i;
+	fprintf(out, "Number of vertices: %d\n", G->n);
+	if (G->V) {
+		fprintf(out, "\nAdiacency lists\n");
+		for (i=0; i < G->n; i++) {
+			fprintf(out, "%d -> ", i);
+			exportList(G->V[i], out);
+		}
+	}
+	if (G->A) {
+		fprintf(out, "\nAdiacency matrix\n");
+		exportMatrix(out, G->A, G->n, G->n);
+	}
+	if (G->C) {
+		fprintf(out, "\nNumber of components: %d\n", G->nC);
+		exportComponent(out, G->C);
+	}
+	return;
+}
+
 void exportGraphTerminator (FILE *out, graph *G) { //debugged
 	int i;
 	fprintf(out, "%d\n", G->n);
@@ -357,16 +389,6 @@ void exportGraphTerminator (FILE *out, graph *G) { //debugged
 		exportListTerminator(G->V[i], out);
 	}
 	fprintf(out, "\n");
-	return;
-}
-
-void exportGraph (FILE *out, graph *G) { //debugged
-	int i;
-	fprintf(out, "%d\n", G->n);
-	for (i=0; i < G->n; i++) {
-		fprintf(out, "%d\t", listLength(G->V[i]));
-		exportList(G->V[i], out);
-	}
 	return;
 }
 
@@ -428,7 +450,7 @@ int initializeGraph (graph *G, int n) { //debugged
 		flag = 0;
 	} else {
 		G->n = n;
-		G->nC = -1;
+		G->nC = 0;
 		for (i=0; i < n; i++)
 			G->V[i] = NULL;
 		G->C = NULL;

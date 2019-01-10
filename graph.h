@@ -11,7 +11,7 @@
 ** version 0      30/10/2018
 ** last updated   10/01/2019
 **
-** function count -> 23
+** function count -> 24
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -121,15 +121,20 @@ void exportComponent (FILE *out, component *list);
 
 /*
  * prints the graph in out stream
- * output is compatible with importGraphTerminator
- */
-void exportGraphTerminator (FILE *out, graph *G);
-
-/*
- * prints the graph in out stream
  * output is compatible with importGraph
  */
 void exportGraph (FILE *out, graph *G);
+
+/*
+ * prints all available information
+ */
+void exportGraphComplete (FILE *out, graph *G);
+
+/*
+ * prints the graph in out stream
+ * output is compatible with importGraphTerminator
+ */
+void exportGraphTerminator (FILE *out, graph *G);
 
 /*
  * converts the adiacency list of G in the adiacency matrix M

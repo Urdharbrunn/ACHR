@@ -81,7 +81,7 @@ int tenToBase (int x, int b, int *A);
 //function count -> 0
 
 //graph.h
-//function count -> 23
+//function count -> 24
 int addEdge (graph *G, int u, int v);
 component *allocateComponent (int k);
 graph *allocateGraph (void);
@@ -95,7 +95,8 @@ void deleteGraph (graph *G);
 void deleteNode (graph *G, int u);
 void exportComponent (FILE *out, component *list);
 void exportGraph (FILE *out, graph *G);
-void exportSelfCompatibleGraph (graph *G, FILE *out);
+void exportGraphComplete (FILE *out, graph *G);
+void exportGraphTerminator (graph *G, FILE *out);
 void graphToMatrix (graph *G, int **A);
 int importGraph (FILE *input, graph *G);
 int importGraphTerminator (FILE *input, graph *G);

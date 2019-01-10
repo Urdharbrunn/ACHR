@@ -9,9 +9,9 @@
 **
 ** first created  30/10/2018 (with older materials)
 ** version 0      30/10/2018
-** last updated   08/01/2019
+** last updated   10/01/2019
 **
-** function count -> 21
+** function count -> 22
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -64,6 +64,12 @@ graph *allocateGraph (void);
  * returns 0 if failed 1 otherwise
  */
 int BFSComponents (graph *G);
+
+/*
+ * runs the BFS and constructs the distance vector
+ * returns pointer to vector or NULL if failed
+ */
+int *BFSDistance (graph *G, int s);
 
 /*
  * runs the BFS and constructs the father's vector

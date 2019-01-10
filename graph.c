@@ -8,9 +8,9 @@
 **
 ** first created	30/10/2018 (with older materials)
 ** version 0			30/10/2018
-** last updated		08/01/2019
+** last updated		10/01/2019
 **
-** function count -> 21
+** function count -> 22
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -118,6 +118,50 @@ int BFSComponents (graph *G) { //debugged
 	return (flag);
 }
 
+int *BFSDistance (graph *G, int s) {
+	int *colour = NULL, *D = NULL, u;
+	node *v = NULL;
+	queue Q;
+
+	//initialization
+	colour = allocateVector(G->n);
+	D = allocateVector(G->n);
+	if (!colour || !D)
+		D = NULL;
+
+	Q.first = NULL;
+	Q.last = NULL;
+
+	if (!push(&Q, s)) {
+		deleteVector(D);
+		D = NULL;
+	}
+
+	if (D) { //all went ok
+		initializeVector(colour, G->n, 0);
+		initializeVector(D, G->n, -1);
+		colour[s] = 1;
+		D[s] = 0;
+		while (Q.first && D) {
+			u = pop(&Q);
+			v = G->V[u];
+			while (v && D) {
+				if (!colour[v->info]) {
+					colour[v->info] = 1;
+					D[v->info] = D[u] + 1;
+					if (!push(&Q, v->info)) {
+						deleteVector(D);
+						D = NULL;
+					}
+				}
+				v = v->next;
+			}
+		}
+
+	}
+	return (D);
+}
+
 int *BFSTree (graph *G, int s) { //debugged
 	int *colour = NULL, *P = NULL, u;
 	node *v = NULL;
@@ -126,9 +170,8 @@ int *BFSTree (graph *G, int s) { //debugged
 	//initialization
 	colour = allocateVector(G->n);
 	P = allocateVector(G->n);
-	if (!colour || !P) {
+	if (!colour || !P)
 		P = NULL;
-	}
 
 	Q.first = NULL;
 	Q.last = NULL;

@@ -10,7 +10,7 @@
 ** version 0			30/10/2018
 ** last updated		10/01/2019
 **
-** function count -> 22
+** function count -> 23
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -61,8 +61,62 @@ graph *allocateGraph (void) { //debugged
 	return (G);
 }
 
+int BFS (graph *G, int s, int *D, int *P, int doComponent) { //debugged
+	int *colour = NULL, u, flag = 1;
+	node *v = NULL;
+	queue Q;
+
+	//initialization
+	colour = allocateVector(G->n);
+
+	Q.first = NULL;
+	Q.last = NULL;
+
+	if (push(&Q, s) && colour) { //all went ok
+		if (doComponent) {
+			G->C = stackComponent(G->C, s);
+			if (!G->C)
+				flag = 0;
+			else {
+				G->C->vertex = stack(G->C->vertex, s);
+				G->C->size ++;
+				G->nC ++;
+			}
+		}
+
+		initializeVector(colour, G->n, 0);
+		initializeVector(P, G->n, -1);
+		initializeVector(D, G->n, -1);
+		colour[s] = 1;
+		D[s] = 0;
+		while (Q.first && flag) {
+			u = pop(&Q);
+			v = G->V[u];
+			while (v && flag) {
+				if (!colour[v->info]) {
+					colour[v->info] = 1;
+					if (doComponent) {
+						G->C->vertex = stack(G->C->vertex, v->info);
+						if (!G->C->vertex)
+							flag = 0;
+						else
+							G->C->size ++;
+					}
+					D[v->info] = D[u] + 1;
+					P[v->info] = u;
+					if (!push(&Q, v->info))
+						flag = 0;
+				}
+				v = v->next;
+			}
+		}
+
+	}
+	return (flag);
+}
+
 int BFSComponents (graph *G) { //debugged
-	int *colour = malloc(sizeof(int)*G->n), v, k = 0, flag = 1, r;
+	int *colour = malloc(sizeof(int)*G->n), v, flag = 1, r;
 	node *u = NULL;
 	queue Q;
 	component *H = NULL;
@@ -86,7 +140,7 @@ int BFSComponents (graph *G) { //debugged
 		while (r < G->n && flag) {
 			if (!colour[r]) {
 				flag = push(&Q, r);
-				H = stackComponent(H, k++);
+				H = stackComponent(H, r);
 				if (H) {
 					H->vertex = stack(H->vertex, r);
 					H->size++;
@@ -118,7 +172,7 @@ int BFSComponents (graph *G) { //debugged
 	return (flag);
 }
 
-int *BFSDistance (graph *G, int s) {
+int *BFSDistance (graph *G, int s) { //debugged
 	int *colour = NULL, *D = NULL, u;
 	node *v = NULL;
 	queue Q;
@@ -216,7 +270,7 @@ void deleteComponentList (component *list) { //debugged
 	return;
 }
 
-int deleteEdge (graph *G, int u, int v) {
+int deleteEdge (graph *G, int u, int v) { //debugged
 	node *p = G->V[u], *q;
 	int flag = 0;
 
@@ -377,6 +431,8 @@ int initializeGraph (graph *G, int n) { //debugged
 		G->nC = -1;
 		for (i=0; i < n; i++)
 			G->V[i] = NULL;
+		G->C = NULL;
+		G->A = NULL;
 	}
 	return(flag);
 }

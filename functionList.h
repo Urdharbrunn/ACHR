@@ -81,10 +81,11 @@ int tenToBase (int x, int b, int *A);
 //function count -> 0
 
 //graph.h
-//function count -> 22
+//function count -> 23
 int addEdge (graph *G, int u, int v);
 component *allocateComponent (int k);
 graph *allocateGraph (void);
+int BFS (graph *G, int s, int *D, int *P, int doComponent);
 int BFSComponents (graph *G);
 int *BFSDistance (graph *G, int s);
 int *BFSTree (graph *G, int s);

@@ -11,7 +11,7 @@
 ** version 0      30/10/2018
 ** last updated   10/01/2019
 **
-** function count -> 22
+** function count -> 23
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -60,20 +60,31 @@ component *allocateComponent (int k);
 graph *allocateGraph (void);
 
 /*
+ * runs a complete BFS from s
+ * constructs distances and father's vectors
+ * if doComponent is not 0, calculates the connected components too
+ * return 0 if failed, 1 otherwise
+ * note: -1 means not reachable from s
+ */
+int BFS (graph *G, int s, int *D, int *P, int doComponent);
+
+/*
  * runs the BFS and constructs the connected components
  * returns 0 if failed 1 otherwise
  */
 int BFSComponents (graph *G);
 
 /*
- * runs the BFS and constructs the distance vector
+ * runs the BFS from s and constructs the distance vector
  * returns pointer to vector or NULL if failed
+ * note: -1 means not reachable from s
  */
 int *BFSDistance (graph *G, int s);
 
 /*
- * runs the BFS and constructs the father's vector
+ * runs the BFS from s and constructs the father's vector
  * returns pointer to vector or NULL if failed
+ * note: -1 means not reachable from s
  */
 int *BFSTree (graph *G, int s);
 

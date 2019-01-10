@@ -222,6 +222,11 @@ int deleteEdge (graph *G, int u, int v) {
 
 	q = p;
 	p = p->next;
+	if (q->info == v) {
+		flag = 1;
+		free(q);
+		G->V[u] = p;
+	}
 	while (p && !flag) {
 		if (p->info == v) {
 			q->next = p->next;

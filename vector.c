@@ -10,7 +10,7 @@
 **
 ** first created	26/10/2018 (with older materials)
 ** version 0			29/10/2018
-** last updated		20/12/2018
+** last updated		11/01/2019
 **
 ** function count -> 31
 **
@@ -24,7 +24,9 @@
 
 int **allocateMatrix (int n, int m) { //debugged
 	int i = 0, **X = NULL;
-	X = malloc(sizeof(int*)*n);
+	if (n < 0 || m < 0)
+		fprintf(stderr, "!E allocateMatrix: requested negative memory allocation\n");
+	else X = malloc(sizeof(int*)*n);
 	if (!X)
 		fprintf (stderr, "!E allocateMatrix: memory allocation error\n");
 	else {
@@ -42,7 +44,11 @@ int **allocateMatrix (int n, int m) { //debugged
 }
 
 int *allocateVector (int n) { //debugged
-	int *X = malloc(sizeof(int)*n);
+	int *X = NULL;
+	if (n < 0)
+		fprintf(stderr, "!E allocateVector: requested negative memory allocation\n");
+	else
+		X = malloc(sizeof(int)*n);
 	if(!X)
 		fprintf(stderr, "!E allocate Vector: memory allocation error\n");
 	return(X);

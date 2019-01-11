@@ -9,7 +9,7 @@
 **
 ** first created  30/10/2018 (with older materials)
 ** version 0      30/10/2018
-** last updated   10/01/2019
+** last updated   11/01/2019
 **
 ** function count -> 24
 **
@@ -31,12 +31,14 @@ typedef struct xcomponent {
  * graph structure
  * includes adiacency lists, adiacency matrix and list of components
  * graphs are supposed to be sparse, so adiacency matrix is not often used
+ * Deleted is the array in which we memorized if a node is deleted
  */
 typedef struct xgraph {
 	int n;
 	node **V;
 	int **A;
 	component *C;
+	int *Deleted;
 	int nC;
 } graph;
 

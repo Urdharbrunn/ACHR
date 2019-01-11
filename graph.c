@@ -8,7 +8,7 @@
 **
 ** first created	30/10/2018 (with older materials)
 ** version 0			30/10/2018
-** last updated		10/01/2019
+** last updated		11/01/2019
 **
 ** function count -> 23
 **
@@ -138,7 +138,7 @@ int BFSComponents (graph *G) { //debugged
 		//cycle on components
 		r = 0;
 		while (r < G->n && flag) {
-			if (!colour[r]) {
+			if (!colour[r] && !G->Deleted[u]) {
 				flag = push(&Q, r);
 				H = stackComponent(H, r);
 				colour[r] = 1;
@@ -318,6 +318,16 @@ void deleteGraph (graph *G) {
 
 void deleteNode (graph *G, int u) { //debugged
 	int v;
+
+	if (!G->Deleted) {
+		G->Deleted = allocateVector(G->n);
+		if (G->Deleted) {
+			fprintf(stderr, "!W deleteNode: deleted vector was not allocated\n");
+			initializeVector(G->Deleted, G->n, 0);
+			G->Deleted[u] = 1;
+		}
+	} else
+		G->Deleted[u] = 1;
 
 	//delete u from every adiacency list
 	for (v = 0; v < G->n; v++)

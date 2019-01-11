@@ -4,11 +4,12 @@
 ** whose integral text is part of the repository itself
 **
 ** header for sort algorithms on vectors
-** this requires the vector.h
 **
 ** first created 	03/12/2018 (with older materials)
-** version 0			
-** last updated		03/12/2018
+** version 0			03/12/2018
+** last updated		11/01/2019
+**
+** function count -> 16
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -26,8 +27,6 @@ void bubbleSort (int *X, int n);
  * returns the extracted value
  */
 int extractHeap (int *H);
-
-int extractHeapSorting (int *H, int *P);
 
 /*
  * applies heap sort
@@ -64,6 +63,20 @@ int medianOfThree (int *X, int k, int n);
  * this is for the priority version, so works on P and X simoultaneously
  */
 int medianOfThreePriority (int *X, int *P, int k, int n);
+
+/*
+ * does the merge part of merge sort
+ * returns 0 on allocation error, 1 otherwise
+ */
+int merge (int *X, int p, int q, int r);
+
+/*
+ * applies merge sort
+ * first call si mergeSort(X, 0, length(X))
+ * depends on merge function
+ * returns 0 if merge failed to allocate memory
+ */
+int mergeSort (int *X, int p, int r);
 
 /*
  * applies the pivoting to subvector k->n-1 of X using Lomuto's scheme

@@ -6,10 +6,10 @@
 ** source for sort algorithms on vectors
 **
 ** first created 	03/12/2018 (with older materials)
-** version 0			
-** last updated		03/12/2018
+** version 0			03/12/2018
+** last updated		11/01/2019
 **
-** function count -> 
+** function count -> 16
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -36,26 +36,6 @@ void bubbleSort (int *X, int n) { //debugged
 }
 
 int extractHeap (int *H) { //debugged
-	int i = H[0]-1, m = H[1];
-	H[1] = H[i];
-	H[0]--;
-	i = 1;
-	while ( 2*i < H[0] && ( H[i] < H[2*i] || H[i] < H[2*i+1] ) ) {
-		if ( H[2*i] > H[2*i+1] ){
-			swap(&H[i], &H[2*i]);
-			i = 2*i;
-		}
-		else {
-			swap(&H[i], &H[2*i+1]);
-			i = 2*i+1;
-		}
-	}
-	if (2*i == H[0] && H[i] < H[2*1])
-		swap(&H[i], &H[2*i]);
-	return (m);
-}
-
-int extractHeapSorting (int *H, int *P) { //debugged
 	int i = H[0]-1, m = H[1];
 	H[1] = H[i];
 	H[0]--;
@@ -159,6 +139,52 @@ int medianOfThreePriority (int *X, int *P, int k, int n) { //debugged
 		swap(&X[m], &X[n]);
 	}
 	return (P[n]);
+}
+
+int merge (int *X, int p, int q, int r) { //debugged
+	int i = p, j = q + 1, k = 0, *C = NULL, flag = 0;
+	C = malloc(sizeof(int)*(r-p));
+	if (!C)
+		fprintf (stderr, "!E merge: memory allocation error\n");
+	else {
+		flag = 1;
+		while (i <= q && j < r) {
+			if (X[i] < X[j]) {
+				C[k] = X[i];
+				i++;
+			} else {
+					C[k] = X[j];
+					j++;
+				}
+			k++;
+		}
+		while (i <= q) {
+			C[k] = X[i];
+			k++;
+			i++;
+		}
+		while (j < r) {
+			C[k] = X[j];
+			k++;
+			j++;
+		}
+		for (k=p; k < r; k++)
+			X[k] = C[k-p];
+	}
+	return(flag);
+}
+
+int mergeSort (int *X, int p, int r) { //debugged
+	int q, flag = 1;
+	if (p < r) {
+		q = (p + r) / 2;
+		flag = mergeSort(X, p, q);
+		if (flag)
+			flag = mergeSort(X, q + 1, r);
+		if (flag)
+			flag = merge(X, p, q, r+1);
+	}
+	return (flag);
 }
 
 int pivoting (int *X, int k, int n) { //debugged

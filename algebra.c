@@ -204,8 +204,11 @@ sieve *initializeSieve (int n) { //debugged
 					fprintf(stderr, "!E initializeSieve: sieve memory allocation failed\n");
 					i = n + 1;
 				}
-				k = 2*i;
-				while (k <= n) {
+				if (i <= n/2)
+					k = 2*i;
+				else
+					k = n+1;
+				while (k <= n && k > 0) { //second condition controls overflow
 					S[k] = 0;
 					k += i;
 				}

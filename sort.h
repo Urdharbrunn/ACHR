@@ -71,12 +71,27 @@ int medianOfThreePriority (int *X, int *P, int k, int n);
 int merge (int *X, int p, int q, int r);
 
 /*
+ * does the merge part of merge sort
+ * returns 0 on allocation error, 1 otherwise
+ * this is for the priority version, so works on P and X simoultaneously
+ */
+int mergePriority (int *X, int *P, int p, int q, int r);
+
+/*
  * applies merge sort
  * first call si mergeSort(X, 0, length(X))
  * depends on merge function
  * returns 0 if merge failed to allocate memory
  */
 int mergeSort (int *X, int p, int r);
+
+/*
+ * applies merge sort
+ * first call is mergeSortPriority(X, P, 0, length(X)-1)
+ * depends on merge function
+ * returns 0 if merge failed to allocate memory
+ */
+int mergeSortPriority (int *X, int *P, int p, int r);
 
 /*
  * applies the pivoting to subvector k->n-1 of X using Lomuto's scheme
@@ -97,7 +112,8 @@ int pivotingPriority (int *X, int *P, int k, int n);
  * applies quick sort
  * first call is quickSort(X, 0, length(X))
  * this calls pivoting(X, k, n)
- * slightly optimized with lomuto with median of three pivoting
+ * optimized with lomuto with median of three pivoting
+ * thanks to this, if numbers to order are different, this perform has well has heap and merge sort, sometimes even better
  */
 void quickSort (int *X, int k, int n);
 
@@ -105,7 +121,7 @@ void quickSort (int *X, int k, int n);
  * applies quick sort
  * first call is quickSortPriority(X, 0, length(X))
  * this calls pivotingPriority(X, k, n)
- * slightly optimized with lomuto with median of three pivoting
+ * optimized with lomuto with median of three pivoting
  */
 void quickSortPriority (int *X, int *P, int k, int n);
 

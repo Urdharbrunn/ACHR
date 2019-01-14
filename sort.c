@@ -174,6 +174,46 @@ int merge (int *X, int p, int q, int r) { //debugged
 	return(flag);
 }
 
+int mergePriority (int *X, int *P, int p, int q, int r) {
+	int i = p, j = q + 1, k = 0, *C = NULL, flag = 0, *B = NULL;
+	C = malloc(sizeof(int)*(r-p));
+	B = malloc(sizeof(int)*(r-p));
+	if (!C || ! B)
+		fprintf (stderr, "!E mergePriority: memory allocation error\n");
+	else {
+		flag = 1;
+		while (i <= q && j < r) {
+			if (P[i] < P[j]) {
+				C[k] = X[i];
+				B[k] = P[i];
+				i++;
+			} else {
+				C[k] = X[j];
+				B[k] = P[j];
+				j++;
+			}
+			k++;
+		}
+		while (i <= q) {
+			C[k] = X[i];
+			B[k] = P[i];
+			k++;
+			i++;
+		}
+		while (j < r) {
+			C[k] = X[j];
+			B[k] = P[j];
+			k++;
+			j++;
+		}
+		for (k=p; k < r; k++) {
+			X[k] = C[k-p];
+			P[k] = B[k-p];
+		}
+	}
+	return(flag);
+}
+
 int mergeSort (int *X, int p, int r) { //debugged
 	int q, flag = 1;
 	if (p < r) {
@@ -183,6 +223,19 @@ int mergeSort (int *X, int p, int r) { //debugged
 			flag = mergeSort(X, q + 1, r);
 		if (flag)
 			flag = merge(X, p, q, r+1);
+	}
+	return (flag);
+}
+
+int mergeSortPriority (int *X, int *P, int p, int r) { //debugged
+	int q, flag = 1;
+	if (p < r) {
+		q = (p + r) / 2;
+		flag = mergeSortPriority(X, P, p, q);
+		if (flag)
+			flag = mergeSortPriority(X, P, q + 1, r);
+		if (flag)
+			flag = mergePriority(X, P, p, q, r+1);
 	}
 	return (flag);
 }

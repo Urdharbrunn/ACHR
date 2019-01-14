@@ -12,7 +12,7 @@
 ** version 0			29/10/2018
 ** last updated		20/12/2018
 **
-** function count -> 31
+** function count -> 30
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -112,13 +112,6 @@ void linearVectors (int *V, int *W, int *Z, int n, int a, int b);
  * multiplies Z = XY, where X has dimensions (n,m) and Y (m,p)
  */
 void matrixMatrix (int **X, int **Y, int **Z, int n, int m, int p);
-
-/*
- * multiplies Z = XY, where X has dimensions (n,m) and Y (m,p)
- * this is done by transposing Y and multipling on the rows, so requires RAM
- * returns 0 if failed to allocate transpose matrix, else Z's columns number
- */
-int matrixMatrixPlus (int **X, int **Y, int **Z, int n, int m, int p);
 
 /*
  * multiplies P = XB, where X is a matrices of dimensions (n,m) and B a vector of length m

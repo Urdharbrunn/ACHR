@@ -168,7 +168,6 @@ void initializeVector (int *X, int n, int a);
 void linearMatrices (int **X, int **Y, int **Z, int n, int m, int a, int b);
 void linearVectors (int *V, int *W, int *Z, int n, int a, int b);
 void matrixMatrix (int **X, int **Y, int **Z, int n, int m, int p);
-int matrixMatrixPlus (int **X, int **Y, int **Z, int n, int m, int p);
 void matrixVector (int **X, int *B, int *P, int n, int m);
 int maxVector (int *X, int n);
 int minVector (int *X, int n);

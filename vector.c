@@ -12,7 +12,7 @@
 ** version 0			29/10/2018
 ** last updated		11/01/2019
 **
-** function count -> 31
+** function count -> 30
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -51,6 +51,7 @@ int *allocateVector (int n) { //debugged
 		X = malloc(sizeof(int)*n);
 	if(!X)
 		fprintf(stderr, "!E allocate Vector: memory allocation error\n");
+	fflush(stderr);
 	return(X);
 }
 
@@ -175,19 +176,6 @@ void matrixMatrix (int **X, int **Y, int **Z, int n, int m, int p) { //debugged
 			Z[i][j] = s;
 		}
 	return;
-}
-
-int matrixMatrixPlus (int **X, int **Y, int **Z, int n, int m, int p) { //debugged
-	int **W, i, j = 0;
-
-	W = allocateMatrix(p, m);
-	if (W) {
-		transposeMatrix(Y, W, m, p);
-		for (i=0; i < n; i++)
-			for (j=0; j < p; j++)
-				Z[i][j] = vectorVector(X[i], W[j], m);
-	}
-	return (j);
 }
 
 int maxVector (int *X, int n) { //debugged

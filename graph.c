@@ -9,9 +9,9 @@
 **
 ** first created	30/10/2018 (with older materials)
 ** version 0			30/10/2018
-** last updated		11/01/2019
+** last updated		15/01/2019
 **
-** function count -> 23
+** function count -> 25
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -26,13 +26,33 @@
 
 int addEdge(graph *G, int u, int v) { //debugged
 	int flag = 1;
-
-	if (u > G->n || v > G->n) {
+	if (!G) {
+		flag = 0;
+		fprintf(stderr, "!W addEdge: graph is not allocated\n");
+	}
+	else if (u > G->n || v > G->n) {
 		flag = 0;
 		fprintf(stderr, "!W addEdge: requested edge out of bound\n");
 	} else
 		G->V[u] = stack(G->V[u], v);
 
+	return(flag);
+}
+
+int addEdgeMatrix(graph *G, int u, int v) {
+	int flag = 1;
+	if (!G) {
+		flag = 0;
+		fprintf(stderr, "!W addEdgeMatrix: graph is not allocated\n");
+	}
+	else if (u > G->n || v > G->n) {
+		flag = 0;
+		fprintf(stderr, "!W addEdgeMatrix: requested edge out of bound\n");
+	} else if (!G->A) {
+		flag = 0;
+		fprintf(stderr, "!W addEdgeMatrix: matrix is not allocated");
+	} else
+		G->A[u][v] = 1;
 	return(flag);
 }
 

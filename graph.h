@@ -9,9 +9,9 @@
 **
 ** first created  30/10/2018 (with older materials)
 ** version 0      30/10/2018
-** last updated   11/01/2019
+** last updated   15/01/2019
 **
-** function count -> 24
+** function count -> 25
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -49,6 +49,13 @@ typedef struct xgraph {
  * note: does NOT add the edge v->u too
  */
 int addEdge(graph *G, int u, int v);
+
+/*
+ * adds the edge u->v in adiacency matrix
+ * returns 0 if u or v does not exists in graph or if matrix is not allocated
+ * note: does not add the edge u->v too
+ */
+int addEdgeMatrix(graph *G, int u, int v);
 
 /*
  * allocates memory for a component structure and returns pointer

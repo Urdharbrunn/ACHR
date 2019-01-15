@@ -10,7 +10,7 @@
 **
 ** first created	26/10/2018 (with older materials)
 ** version 0			29/10/2018
-** last updated		20/12/2018
+** last updated		14/01/2019
 **
 ** function count -> 30
 **
@@ -29,12 +29,12 @@ int **allocateMatrix (int n, int m);
 int *allocateVector (int n);
 
 /*
- *  copies the int matrix A into B of dimension (n,m)
+ * copies the int matrix A into B of dimension (n,m)
  */
 void copyMatrix (int **A, int **B, int n, int m);
 
 /*
- *  copies the int vector A into B of length n
+ * copies the int vector A into B of length n
  */
 void copyVector (int *A, int *B, int n);
 

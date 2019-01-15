@@ -16,7 +16,7 @@
 **
 ** first created	07/12/2018 (with older materials)
 ** version 0			07/12/2018
-** last updated		08/01/2019
+** last updated		14/01/2019
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -132,16 +132,19 @@ node *searchNext (node *list, int k);
 node *stack (node *list, int x);
 
 //sort.h
-// function count -> 15
+// function count -> 18
 void bubbleSort (int *X, int n);
 int extractHeap (int *H);
-int extractHeapSorting (int *H, int *P);
 int heapSort (int *X, int n);
 void insertHeap (int *H, int x);
 void insertionSort (int *X, int n);
 void insertionSortPriority(int *X, int *P, int n);
 int medianOfThree (int *X, int k, int n);
 int medianOfThreePriority (int *X, int *P, int k, int n);
+int merge (int *X, int p, int q, int r);
+int mergePriority (int *X, int *P, int p, int q, int r);
+int mergeSort (int *X, int p, int r);
+int mergeSortPriority (int *X, int *P, int p, int r);
 int pivoting (int *X, int k, int n);
 int pivotingPriority (int *X, int *P, int k, int n);
 void quickSort (int *X, int k, int n);

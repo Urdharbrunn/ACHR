@@ -7,9 +7,9 @@
 **
 ** first created 	03/12/2018 (with older materials)
 ** version 0			03/12/2018
-** last updated		11/01/2019
+** last updated		14/01/2019
 **
-** function count -> 16
+** function count -> 18
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno

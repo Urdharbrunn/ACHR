@@ -9,7 +9,7 @@
 **
 ** first created  30/10/2018 (with older materials)
 ** version 0      30/10/2018
-** last updated   15/01/2019
+** last updated   17/01/2019
 **
 ** function count -> 25
 **
@@ -119,9 +119,10 @@ void deleteGraph (graph *G);
  * deletes node u from graph G
  * frees u's list and removes it from other lists
  * updates the adiacency matrix (if present)
- * updates the connected component by recalculating with BFSComponents
+ * updates the connected component by recalculating with BFSComponents (if present)
+ * returns 0 if graph or vector V do not exist
  */
-void deleteNode (graph *G, int u);
+int deleteNode (graph *G, int u);
 
 /*
  * prints the components list in out stream
@@ -147,9 +148,10 @@ void exportGraphTerminator (FILE *out, graph *G);
 
 /*
  * converts the adiacency list of G in the adiacency matrix M
+ * returns 0 if graph or matrix are not allocated
  * note: A MUST be already initialized (not only allocated)
  */
-void graphToMatrix (graph *G, int **A);
+int graphToMatrix (graph *G, int **A);
 
 /*
  * imports a graph from input in G, that must be already allocated.

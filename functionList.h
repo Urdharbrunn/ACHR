@@ -16,7 +16,7 @@
 **
 ** first created	07/12/2018 (with older materials)
 ** version 0			07/12/2018
-** last updated		14/01/2019
+** last updated		17/01/2019
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -81,8 +81,9 @@ int tenToBase (int x, int b, int *A);
 //function count -> 0
 
 //graph.h
-//function count -> 24
+//function count -> 25
 int addEdge (graph *G, int u, int v);
+int addEdgeMatrix(graph *G, int u, int v);
 component *allocateComponent (int k);
 graph *allocateGraph (void);
 int BFS (graph *G, int s, int *D, int *P, int doComponent);
@@ -92,7 +93,7 @@ int *BFSTree (graph *G, int s);
 void deleteComponentList (component *list);
 int deleteEdge (graph *G, int u, int v);
 void deleteGraph (graph *G);
-void deleteNode (graph *G, int u);
+int deleteNode (graph *G, int u);
 void exportComponent (FILE *out, component *list);
 void exportGraph (FILE *out, graph *G);
 void exportGraphComplete (FILE *out, graph *G);

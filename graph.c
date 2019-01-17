@@ -27,7 +27,7 @@
 int addEdge(graph *G, int u, int v) { //debugged
 	int flag = 0;
 	if (!G)
-		fprintf(stderr, "!W addEdge: graph is not allocated\n");
+		fprintf(stderr, "!W addEdge: graph not allocated\n");
 	else if (u > G->n || v > G->n)
 		fprintf(stderr, "!W addEdge: requested edge out of bound\n");
 	else {
@@ -44,11 +44,11 @@ int addEdge(graph *G, int u, int v) { //debugged
 int addEdgeMatrix(graph *G, int u, int v) {
 	int flag = 0;
 	if (!G)
-		fprintf(stderr, "!W addEdgeMatrix: graph is not allocated\n");
+		fprintf(stderr, "!W addEdgeMatrix: graph not allocated\n");
 	else if (u > G->n || v > G->n)
 		fprintf(stderr, "!W addEdgeMatrix: requested edge out of bound\n");
 	else if (!G->A)
-		fprintf(stderr, "!W addEdgeMatrix: matrix is not allocated");
+		fprintf(stderr, "!W addEdgeMatrix: matrix not allocated");
 	else {
 		flag = 1;
 		G->A[u][v] = 1;
@@ -88,13 +88,13 @@ int BFS (graph *G, int s, int *D, int *P, int doComponent) { //debugged
 	queue Q;
 
 	if (!G)
-		fprintf(stderr, "!W BFS: graph is not allocated\n");
+		fprintf(stderr, "!W BFS: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W BFS: vertex vector is not allocated\n");
+		fprintf(stderr, "!W BFS: vertex vector not allocated\n");
 	else if (!D)
-		fprintf(stderr, "!W BFS: distance vector is not allocated\n");
+		fprintf(stderr, "!W BFS: distance vector not allocated\n");
 	else if (!P)
-		fprintf(stderr, "!W BFS: tree vector is not allocated\n");
+		fprintf(stderr, "!W BFS: tree vector not allocated\n");
 	else {
 	
 		//initialization
@@ -159,9 +159,9 @@ int BFSComponents (graph *G) { //debugged
 	component *H = NULL;
 
 	if (!G)
-		fprintf(stderr, "!W BFS: graph is not allocated\n");
+		fprintf(stderr, "!W BFS: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W BFS: vertex vector is not allocated\n");
+		fprintf(stderr, "!W BFS: vertex vector not allocated\n");
 	else {
 		flag = 1;
 
@@ -232,9 +232,9 @@ int *BFSDistance (graph *G, int s) { //debugged
 	queue Q;
 
 	if (!G)
-		fprintf(stderr, "!W BFS: graph is not allocated\n");
+		fprintf(stderr, "!W BFS: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W BFS: vertex vector is not allocated\n");
+		fprintf(stderr, "!W BFS: vertex vector not allocated\n");
 	else {
 
 		//initialization
@@ -283,9 +283,9 @@ int *BFSTree (graph *G, int s) { //debugged
 	queue Q;
 
 	if (!G)
-		fprintf(stderr, "!W BFS: graph is not allocated\n");
+		fprintf(stderr, "!W BFS: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W BFS: vertex vector is not allocated\n");
+		fprintf(stderr, "!W BFS: vertex vector not allocated\n");
 	else {
 
 		//initialization
@@ -343,9 +343,9 @@ int deleteEdge (graph *G, int u, int v) { //debugged
 	int flag = 0;
 
 	if (!G)
-		fprintf(stderr, "!W deleteEdge: graph is not allocated\n");
+		fprintf(stderr, "!W deleteEdge: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W deleteEdge: graph vertex vector is not allocated\n");
+		fprintf(stderr, "!W deleteEdge: graph vertex vector not allocated\n");
 	else {
 		q = G->V[u];
 		p = q->next;
@@ -394,7 +394,7 @@ int deleteNode (graph *G, int u) { //debugged
 
 	if (!G) {
 		flag = 0;
-		fprintf(stderr, "!W deleteNode: graph is not allocated\n");
+		fprintf(stderr, "!W deleteNode: graph not allocated\n");
 	}
 	else if (!G->Deleted) {
 		fprintf(stderr, "!W deleteNode: allocating Deleted vector\n");
@@ -409,7 +409,7 @@ int deleteNode (graph *G, int u) { //debugged
 
 	if (flag && !G->V) {
 		flag = 0;
-		fprintf(stderr, "!W deleteNode: vertex vector is not allocated\n");
+		fprintf(stderr, "!W deleteNode: vertex vector not allocated\n");
 	}
 	else {
 		//delete u from every adiacency list
@@ -436,7 +436,7 @@ int deleteNode (graph *G, int u) { //debugged
 
 void exportComponent (FILE *out, component *list) { //debugged
 	if (!out) {
-		fprintf(stderr, "!W exportComponent: output file is not opened\n");
+		fprintf(stderr, "!W exportComponent: output file not opened\n");
 		list = NULL;
 	}
 	while (list) {
@@ -451,11 +451,11 @@ void exportComponent (FILE *out, component *list) { //debugged
 void exportGraph (FILE *out, graph *G) { //debugged
 	int i;
 	if (!out)
-		fprintf(stderr, "!W exportGraph: output file is not opened\n");
+		fprintf(stderr, "!W exportGraph: output file not opened\n");
 	else if (!G)
-		fprintf(stderr, "!W exportGraph: graph is not allocated\n");
+		fprintf(stderr, "!W exportGraph: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W exportGraph: vertex vector is not allocated\n");
+		fprintf(stderr, "!W exportGraph: vertex vector not allocated\n");
 	else {
 		fprintf(out, "%d\n", G->n);
 		for (i=0; i < G->n; i++) {
@@ -469,11 +469,11 @@ void exportGraph (FILE *out, graph *G) { //debugged
 void exportGraphComplete (FILE *out, graph *G) {
 	int i;
 	if (!out)
-		fprintf(stderr, "!W exportGraphComplete: output file is not opened\n");
+		fprintf(stderr, "!W exportGraphComplete: output file not opened\n");
 	else if (!G)
-		fprintf(stderr, "!W exportGraphComplete: graph is not allocated\n");
+		fprintf(stderr, "!W exportGraphComplete: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W exportGraphComplete: vertex vector is not allocated\n");
+		fprintf(stderr, "!W exportGraphComplete: vertex vector not allocated\n");
 	else {
 		fprintf(out, "Number of vertices: %d\n", G->n);
 		if (G->V) {
@@ -498,11 +498,11 @@ void exportGraphComplete (FILE *out, graph *G) {
 void exportGraphTerminator (FILE *out, graph *G) { //debugged
 	int i;
 	if (!out)
-		fprintf(stderr, "!W exportGraphTerminator: output file is not opened\n");
+		fprintf(stderr, "!W exportGraphTerminator: output file not opened\n");
 	else if (!G)
-		fprintf(stderr, "!W exportGraphTerminator graph is not allocated\n");
+		fprintf(stderr, "!W exportGraphTerminator graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W exportGraphTerminator: vertex vector is not allocated\n");
+		fprintf(stderr, "!W exportGraphTerminator: vertex vector not allocated\n");
 	else {
 		fprintf(out, "%d\n", G->n);
 		for (i=0; i < G->n; i++) {
@@ -519,11 +519,11 @@ int graphToMatrix (graph *G, int **A) { //debugged
 	int i, flag = 0;
 
 	if (!G)
-		fprintf(stderr, "!W graphToMatrix: graph is not allocated\n");
+		fprintf(stderr, "!W graphToMatrix: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W graphToMatrix: vertex vector is not allocated\n");
+		fprintf(stderr, "!W graphToMatrix: vertex vector not allocated\n");
 	else if (!G->A)
-		fprintf(stderr, "!W graphToMatrix: matrix is not allocated\n");
+		fprintf(stderr, "!W graphToMatrix: matrix not allocated\n");
 	else {
 		flag = 1;
 		for (i=0; i < G->n; i++) {
@@ -540,11 +540,11 @@ int graphToMatrix (graph *G, int **A) { //debugged
 int importGraph (FILE *input, graph *G) { //debugged
 	int i = 0;
 	if (!input)
-		fprintf(stderr, "!W importGraph: input file is not opened\n");
+		fprintf(stderr, "!W importGraph: input file not opened\n");
 	else if (!G)
-		fprintf(stderr, "!W importGraph: graph is not allocated\n");
+		fprintf(stderr, "!W importGraph: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W importGraph: vertex vector is not allocated\n");
+		fprintf(stderr, "!W importGraph: vertex vector not allocated\n");
 	else {
 		fscanf(input, "%d", &G->n);
 		G->V = malloc(G->n * sizeof(node*));
@@ -564,11 +564,11 @@ int importGraph (FILE *input, graph *G) { //debugged
 int importGraphTerminator (FILE *input, graph *G) { //debugged
 	int i, v = 0, x;
 	if (!input)
-		fprintf(stderr, "!W importGraph: input file is not opened\n");
+		fprintf(stderr, "!W importGraph: input file not opened\n");
 	else if (!G)
-		fprintf(stderr, "!W importGraph: graph is not allocated\n");
+		fprintf(stderr, "!W importGraph: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W importGraph: vertex vector is not allocated\n");
+		fprintf(stderr, "!W importGraph: vertex vector not allocated\n");
 	else {
 		fscanf(input, "%d", &G->n);
 
@@ -592,7 +592,7 @@ int importGraphTerminator (FILE *input, graph *G) { //debugged
 int initializeGraph (graph *G, int n) { //debugged
 	int flag = 1, i;
 	if (!G) {
-		fprintf(stderr, "!W initializeGraph: graph is not allocated\n");
+		fprintf(stderr, "!W initializeGraph: graph not allocated\n");
 		flag = 0;
 	}
 	else {
@@ -621,9 +621,9 @@ int mathExportGraph (graph *G, char name[]) { //debugged
 	if (!out)
 		fprintf(stderr, "!E mathExportGraph: error opening file %s in write mode\n", name);
 	else if (!G)
-		fprintf(stderr, "!W mathExportGraph: graph is not allocated\n");
+		fprintf(stderr, "!W mathExportGraph: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W mathExportGraph: vertex vector is not allocated\n");
+		fprintf(stderr, "!W mathExportGraph: vertex vector not allocated\n");
 	else {
 		flag = 1;
 		fprintf(out, "graph {\n");
@@ -647,11 +647,11 @@ int matrixToGraph (int **A, graph *G) { //debugged
 	int i, j, flag = 0;
 
 	if (!G)
-		fprintf(stderr, "!W matrixToGraph: graph is not allocated\n");
+		fprintf(stderr, "!W matrixToGraph: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W matrixToGraph: vertex vector is not allocated\n");
+		fprintf(stderr, "!W matrixToGraph: vertex vector not allocated\n");
 	else if (!A)
-		fprintf(stderr, "!W matrixToGraph: matrix is not allocated\n");
+		fprintf(stderr, "!W matrixToGraph: matrix not allocated\n");
 	else {
 		flag = 1;
 		for (i=0; i < G->n; i++) {
@@ -673,9 +673,9 @@ int randomGraph48 (graph *G, double p) { //debugged
 	int i, j, n, flag = 0;
 
 	if (!G)
-		fprintf(stderr, "!W randomGraph48: graph is not allocated\n");
+		fprintf(stderr, "!W randomGraph48: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W randomGraph48: vertex vector is not allocated\n");
+		fprintf(stderr, "!W randomGraph48: vertex vector not allocated\n");
 	else {
 		n = G->n;
 		flag = n;
@@ -698,9 +698,9 @@ int randomDigraph48 (graph *G, double p) { //debugged
 	int i, j, n, flag = 0;
 
 	if (!G)
-		fprintf(stderr, "!W randomGraph48: graph is not allocated\n");
+		fprintf(stderr, "!W randomGraph48: graph not allocated\n");
 	else if (!G->V)
-		fprintf(stderr, "!W randomGraph48: vertex vector is not allocated\n");
+		fprintf(stderr, "!W randomGraph48: vertex vector not allocated\n");
 	else {
 		n = G->n;
 		flag = 1;
@@ -742,13 +742,13 @@ int transposeGraph (graph *G, graph *GT) { //debugged
 	node *p, *q;
 
 	if (!G)
-		fprintf(stderr, "!W transposeGraph: graph is not allocated\n");
+		fprintf(stderr, "!W transposeGraph: graph not allocated\n");
 	else if (!GT)
-		fprintf(stderr, "!W transposeGraph: transpost graph is not allocated\n");
+		fprintf(stderr, "!W transposeGraph: transpost graph not allocated\n");
 	else if (!GT->V)
-		fprintf(stderr, "!W transposeGraph: transpost graph's vertex vector is not allocated\n");
+		fprintf(stderr, "!W transposeGraph: transpost graph's vertex vector not allocated\n");
 	else if (!G->V) 
-		fprintf(stderr, "!W transposeGraph: vertex vector is not allocated\n");
+		fprintf(stderr, "!W transposeGraph: vertex vector not allocated\n");
 	else {
 		flag = 1;
 		for (u=0; u < G->n; u++) {

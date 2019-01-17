@@ -7,7 +7,7 @@
 **
 ** first created	20/12/2018 (with older materials)
 ** version 0			20/12/2018
-** last updated		08/01/2019
+** last updated		17/01/2019
 
 ** function count -> 20
 **
@@ -71,7 +71,7 @@ node *deleteList (node *list) { //debugged
 
 void deleteNodeNext (node *p) { //debugged
 	node *t = NULL;
-	if(!p->next)
+	if (!p || !p->next)
 		fprintf(stderr, "!W deleteNodeNext: requested deletion of NULL node\n");
 	else {
 		t = p->next->next;
@@ -81,74 +81,102 @@ void deleteNodeNext (node *p) { //debugged
 	return;
 }
 
-void exportList (node *list, FILE *out) { //debugged
-	while (list) {
-		fprintf (out, "%d ", list->info);
-		list = list->next;
+void exportList (FILE *out, node *list) { //debugged
+	if (!out)
+		fprintf(stderr, "!W exportList: output file not opened\n");
+	else {
+		while (list) {
+			fprintf (out, "%d ", list->info);
+			list = list->next;
+		}
+		fprintf (out, "\n");
 	}
-	fprintf (out, "\n");
 	return;
 }
 
-void exportListTerminator (node *list, FILE *out) { //debugged
-	while (list) {
-		fprintf (out, "%d ", list->info);
-		list = list->next;
+void exportListTerminator (FILE *out, node *list) { //debugged
+	if (!out)
+		fprintf(stderr, "!W exportList: output file not opened\n");
+	else {
+		while (list) {
+			fprintf (out, "%d ", list->info);
+			list = list->next;
+		}
+		fprintf (out, "-1\n");
 	}
-	fprintf (out, "-1\n");
 	return;
 }
 
 node *goToLast (node *list){ //debugged
-	while (list->next)
+	while (list && list->next)
 		list = list->next;
 	return(list);
 }
 
-node *importQueue (queue *Q, int n, FILE *input) { //debugged
+node *importQueue (FILE *input, queue *Q, int n) { //debugged
 	node *p = NULL;
-	p = malloc(sizeof(node));
-	if (!p)
-		fprintf(stderr, "!E importQueue: memory allocation error\n");
-	else if (n) {
-		fscanf (input, "%d", &p->info);
-		p->next = importQueue(Q, n-1, input);
-		if (!p->next && n > 1) {
-			fprintf(stderr, "!E importQueue: memory allocation error\n");
-			free(p);
-			p = NULL;
-		}
-	}
-	if (!n)
-		p = NULL;
 
-	if (n == 1)
-		Q->last = p;
+	if (!input)
+		fprintf(stderr, "!W importQueue: import file not opened\n");
+	else if (!Q)
+		fprintf(stderr, "!W importQueue: queue not allocated\n");
+	else {
+		p = malloc(sizeof(node));
+		if (!p)
+			fprintf(stderr, "!E importQueue: memory allocation error\n");
+		else if (n) {
+			fscanf (input, "%d", &p->info);
+			p->next = importQueue(Q, n-1, input);
+			if (!p->next && n > 1) {
+				fprintf(stderr, "!E importQueue: memory allocation error\n");
+				free(p);
+				p = NULL;
+			}
+		}
+		if (!n)
+			p = NULL;
+
+		if (n == 1)
+			Q->last = p;
+	}
 	return (p);
 }
 
-node *importStack (int n, FILE *input) { //debugged
-	node *s = NULL, *p;
+node *importStack (FILE *input, int n) { //debugged
+	node *s = NULL, *p = NULL;
 	int i;
-	for (i=0; i < n; i++) {
-		p = malloc(sizeof(node));
-		if (!p) {
-			fprintf(stderr, "!E importStack: memory allocation error\n");
-			free(s);
-			s = NULL;
-		} else {
-			fscanf (input, "%d", &p->info);
-			p->next = s;
-			s = p;
+
+	if (!input)
+		fprintf(stderr, "!W importQueue: import file not opened\n");
+	else {
+		for (i=0; i < n; i++) {
+			p = malloc(sizeof(node));
+			if (!p) {
+				fprintf(stderr, "!E importStack: memory allocation error\n");
+				free(s);
+				s = NULL;
+			} else {
+				fscanf (input, "%d", &p->info);
+				p->next = s;
+				s = p;
+			}
 		}
 	}
 	return (s);
 }
 
-void insertNode (node *p, node *q) { //debugged
-	q->next = p->next;
-	p->next = q;
-	return;
+int insertNode (node *p, node *q) { //debugged
+	int flag = 0;
+	if (!q)
+		fprintf(stderr, "!W insertNode: requested insertion of NULL node\n");
+	else if (!p)
+		fprintf(stderr, "!W insertNode: requested insertion after NULL node\n");
+	else {
+		flag = 1;
+		q->next = p->next;
+		p->next = q;
+	}
+	return (flag);
 }
 
 node *invertList (node *list) { //debugged
@@ -173,38 +201,50 @@ int listLength (node *list) { //debugged
 	return (length);
 }
 
-int pop(queue *Q) { //debugged
-	int x = Q->first->info;
+int pop (queue *Q) { //debugged
+	int x = 0;
 	node *p;
-	
-	if (Q->first->next == NULL) {
-		free(Q->first);
-		Q->first = NULL;
-		Q->last = NULL;
-	} else {
-		p = Q->first;
-		Q->first = Q->first->next;
-		free(p);
+
+	if (!Q)
+		fprintf(stderr, "!W pop: queue not allocated\n");
+	else if (!Q->first)
+		fprintf(stderr, "!W pop: requested pop from empty queue\n");
+	else {
+		x = Q->first->info;
+		if (Q->first->next == NULL) {
+			free(Q->first);
+			Q->first = NULL;
+			Q->last = NULL;
+		} else {
+			p = Q->first;
+			Q->first = Q->first->next;
+			free(p);
+		}
 	}
 	return(x);
 }
 
 int push(queue *Q, int x) { //debugged
 	node *p;
-	int flag = 1;
-	p = malloc(sizeof(node));
-	if (!p) {
-		fprintf(stderr, "!E push: memory allocation error\n");
-		flag = 0;
-	} else {
-		p->info = x;
-		p->next = NULL;
-		if (Q->last == NULL){
-			Q->last = p;
-			Q->first = p;
-		} else {
-			Q->last->next = p;
-			Q->last = p;
+	int flag = 0;
+
+	if (!Q)
+		fprintf(stderr, "!W push: queue not allocated\n");
+	else {
+		p = malloc(sizeof(node));
+		if (!p)
+			fprintf(stderr, "!E push: memory allocation error\n");
+		else {
+			flag = 1;
+			p->info = x;
+			p->next = NULL;
+			if (Q->last == NULL){
+				Q->last = p;
+				Q->first = p;
+			} else {
+				Q->last->next = p;
+				Q->last = p;
+			}
 		}
 	}
 	return(flag);
@@ -257,7 +297,7 @@ node *searchDelete (node *list, int k) { //debugged
 
 node *searchDeleteAll (node *list, int k) { //debugged
 	node *p = NULL;
-	while (list->info == k) {
+	while (list & list->info == k) {
 		p = list;
 		list = list->next;
 		free(p);

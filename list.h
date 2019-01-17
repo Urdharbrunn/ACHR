@@ -7,7 +7,7 @@
 **
 ** first created	20/12/2018 (with older materials)
 ** version 0			20/12/2018
-** last updated		08/01/2019
+** last updated		17/01/2019
 **
 ** function count -> 21
 **
@@ -89,8 +89,9 @@ node *importStack (int n, FILE *input);
 
 /*
  * insert node q after p
+ * returns 0 if p or q are NULL
  */
-void insertNode (node *p, node *q);
+int insertNode (node *p, node *q);
 
 /*
  * reverse the ordering of the list
@@ -105,6 +106,8 @@ int listLength (node *list);
 
 /*
  * return the info of the next (first) element of queue Q
+ * returns 0 if queue is empty or does not exist
+ * note: returning 0 is not useful if 0 can be an element
  */
 int pop (queue *Q);
 
@@ -146,7 +149,7 @@ node *searchNext (node *list, int k);
 
 /*
  * add a node in a LIFO stack
- * returns modified stack pointer
- * note: if failes to allocate memory returns the same pointer and send error to stderr, nothing more
+ * returns modified stack pointer or NULL if failed
+ * note: if failes delete the list
  */
 node *stack(node *list, int x);

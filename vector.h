@@ -30,11 +30,13 @@ int *allocateVector (int n);
 
 /*
  * copies the int matrix A into B of dimension (n,m)
+ * returns 0 if A or B are not allocated
  */
-void copyMatrix (int **A, int **B, int n, int m);
+int copyMatrix (int **A, int **B, int n, int m);
 
 /*
  * copies the int vector A into B of length n
+ * returns 0 if A or B are not allocated
  */
 void copyVector (int *A, int *B, int n);
 
@@ -78,35 +80,39 @@ void exportReverseVector(FILE *output, int *A, int n);
 
 /*
  * imports from input file nm integer ordered in matrix X
+ * returns 0 if file is not opened or matrix not allocated
  * note: file must already be opened and matrix initialized
  */
-void importMatrix (FILE *input, int **X, int n, int m);
+int importMatrix (FILE *input, int **X, int n, int m);
 
 /*
  * imports from input file n integer in vector A
+ * returns 0 if file is not opened or vector not allocated
  * note: file must already be opened and vector initialized
  */
-void importVector (FILE *input, int *A, int n);
+int importVector (FILE *input, int *A, int n);
 
 /*
  * initializes the matrix X of n rows m column to a
  */
-void initializeMatrix (int **X, int n, int m, int a);
+int initializeMatrix (int **X, int n, int m, int a);
 
 /*
  * initializes the vector X of length n to a
  */
-void initializeVector (int *X, int n, int a);
+int initializeVector (int *X, int n, int a);
 
 /*
  * calculate Z = aX + bY, matrices of dimensions (n,m)
+ * returns 0 if matrix is not allocated
  */
-void linearMatrices (int **X, int **Y, int **Z, int n, int m, int a, int b);
+int linearMatrices (int **X, int **Y, int **Z, int n, int m, int a, int b);
 
 /*
  * calculate Z = aV + bW, vectors of length n
+ * returns 0 if vector is not allocated
  */
-void linearVectors (int *V, int *W, int *Z, int n, int a, int b);
+int linearVectors (int *V, int *W, int *Z, int n, int a, int b);
 
 /*
  * multiplies Z = XY, where X has dimensions (n,m) and Y (m,p)

@@ -16,7 +16,7 @@
 **
 ** first created	07/12/2018 (with older materials)
 ** version 0			07/12/2018
-** last updated		17/01/2019
+** last updated		18/01/2019
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -112,7 +112,7 @@ int transposeGraph (graph *G, graph *GT);
 //function count -> 21
 queue *allocateQueue (void);
 node* copyNode (node *p);
-node *copyListRecursive (node *list);
+node *copyList (node *list);
 node *deleteList (node *list);
 void deleteNodeNext (node *p);
 void exportList (FILE *out, node *list);

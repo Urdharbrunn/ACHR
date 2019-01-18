@@ -7,7 +7,7 @@
 **
 ** first created	20/12/2018 (with older materials)
 ** version 0			20/12/2018
-** last updated		17/01/2019
+** last updated		18/01/2019
 
 ** function count -> 20
 **
@@ -31,21 +31,28 @@ queue *allocateQueue (void) { //debugged
 	return (Q);
 }
 
-node *copyListRecursive (node *p) { //debugged
-	node *q = NULL;
-	if (p) {
-		q = malloc(sizeof(node));
-		if (q) {
-			q->info = p->info;
-			q->next = copyListRecursive(p->next);
-			if (!q->next && p->next) {
-				free(q);
+node *copyList (node *list) {
+	node *q = NULL, *first = NULL;
+	q = malloc(sizeof(node));
+	if (q && list) {
+		q->info = list->info;
+		list = list->next;
+		first = q;
+		while (list) {
+			q->next = malloc(sizeof(node));
+			q = q->next;
+			if (!q) {
+				deleteList(q);
 				q = NULL;
+			} else {
+				q->info = list->info;
+				list = list->next;
 			}
-		} else
-				fprintf(stderr, "!E copyListRecursive: memory allocation error\n");
+		}
+		if (q)
+			q->next = NULL;
 	}
-	return (q);
+	return(first);
 }
 
 node* copyNode (node *p){ //debugged
@@ -126,7 +133,7 @@ node *importQueue (FILE *input, queue *Q, int n) { //debugged
 			fprintf(stderr, "!E importQueue: memory allocation error\n");
 		else if (n) {
 			fscanf (input, "%d", &p->info);
-			p->next = importQueue(Q, n-1, input);
+			p->next = importQueue(input, Q, n-1);
 			if (!p->next && n > 1) {
 				fprintf(stderr, "!E importQueue: memory allocation error\n");
 				free(p);
@@ -297,7 +304,7 @@ node *searchDelete (node *list, int k) { //debugged
 
 node *searchDeleteAll (node *list, int k) { //debugged
 	node *p = NULL;
-	while (list & list->info == k) {
+	while (list && list->info == k) {
 		p = list;
 		list = list->next;
 		free(p);

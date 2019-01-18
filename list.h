@@ -7,7 +7,7 @@
 **
 ** first created	20/12/2018 (with older materials)
 ** version 0			20/12/2018
-** last updated		17/01/2019
+** last updated		18/01/2019
 **
 ** function count -> 21
 **
@@ -45,7 +45,7 @@ node* copyNode (node *p);
  * returns the pointer to a list identical to list, ordering included
  * note: returns NULL if failed
  */
-node *copyListRecursive (node *list);
+node *copyList (node *list);
 
 /*
  * deletes the list, freeing memory
@@ -61,12 +61,12 @@ void deleteNodeNext (node *p);
 /*
  * prints the list in out stream
  */
-void exportList (node *list, FILE *out);
+void exportList (FILE *out, node *list);
 
 /*
  * prints the list in out stream and terminates it with -1
  */
-void exportListTerminator (node *list, FILE *out);
+void exportListTerminator (FILE *out, node *list);
 
 /*
  * returns pointer to last element of list
@@ -79,13 +79,13 @@ node *goToLast (node *list);
  * note: saves also in Q->last the pointer to last element
  * note: the correct call is Q->first = importQueue (Q, n, input)
  */
-node *importQueue (queue *Q, int n, FILE *input);
+node *importQueue (FILE *input, queue *Q, int n);
 
 /*
  * imports a list of n integers with LIFO structure
  * returns the pointer to the stack or NULL if failed
  */
-node *importStack (int n, FILE *input);
+node *importStack (FILE *input, int n);
 
 /*
  * insert node q after p

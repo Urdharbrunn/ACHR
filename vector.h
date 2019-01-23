@@ -38,7 +38,7 @@ int copyMatrix (int **A, int **B, int n, int m);
  * copies the int vector A into B of length n
  * returns 0 if A or B are not allocated
  */
-void copyVector (int *A, int *B, int n);
+int copyVector (int *A, int *B, int n);
 
 /*
  * deallocates the matrix X and its rows, if they has been allocated

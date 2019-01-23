@@ -126,20 +126,20 @@ void exportSubMatrix (FILE *output, int **X, int k, int h, int p, int q) { //deb
 	return;
 }
 
-void exportReverseVector(FILE *output, int *A, int n) { //debugged
+void exportReverseVector(FILE *output, int *X, int n) { //debugged
 	if (!output)
 		fprintf(stderr, "!W exportReverseVector: outuput file not opened\n");
 	else if (!X)
 		fprintf(stderr, "!W exportReverseVector: vector not allocated\n");
 	else {
 		while (n)
-			fprintf(output, "%d\t", A[--n]);
+			fprintf(output, "%d\t", X[--n]);
 		fprintf(output, "\n");
 	}
 	return;
 }
 
-void exportVector (FILE *output, int *A, int n) { //debugged
+void exportVector (FILE *output, int *X, int n) { //debugged
 	int i;
 
 	if (!output)
@@ -148,7 +148,7 @@ void exportVector (FILE *output, int *A, int n) { //debugged
 		fprintf(stderr, "!W exportVector: matrix not allocated\n");
 	else {
 		for (i=0; i<n; i++)
-			fprintf (output, "%d\t", A[i]);
+			fprintf (output, "%d\t", X[i]);
 		fprintf (output, "\n");
 	}
 	return;
@@ -179,7 +179,7 @@ int importVector (FILE *input, int *A, int n) { //debugged
 		for (i=0; i<n; i++)
 			fscanf (input, "%d", &A[i]);
 	}
-	return;
+	return (i);
 }
 
 int initializeMatrix (int **X, int n, int m, int a) { //debugged
@@ -196,7 +196,7 @@ int initializeMatrix (int **X, int n, int m, int a) { //debugged
 			}
 		}
 	}
-	return;
+	return(flag);
 }
 
 int initializeVector (int *X, int n, int a) { //debugged
@@ -223,13 +223,13 @@ int linearMatrices (int **X, int **Y, int **Z, int n, int m, int a, int b) { //d
 			}
 		}
 	}
-	return;
+	return (flag);
 }
 
 int linearVectors (int *V, int *W, int *Z, int n, int a, int b) { //debugged
 	int i = 0;
 
-	if (!X || !W || !Z)
+	if (!V || !W || !Z)
 		fprintf(stderr, "!W linearVectors: vector not allocated\n");
 	else {
 		for (i=0; i<n; i++)

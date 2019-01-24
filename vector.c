@@ -50,7 +50,7 @@ int *allocateVector (int n) { //debugged
 	else
 		X = malloc(sizeof(int)*n);
 	if(!X)
-		fprintf(stderr, "!E allocate Vector: memory allocation error\n");
+		fprintf(stderr, "!E allocateVector: memory allocation error\n");
 	fflush(stderr);
 	return(X);
 }

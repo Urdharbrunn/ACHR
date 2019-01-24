@@ -20,11 +20,13 @@
 
 /*
  * allocates a matrix of integer with n rows and m column
+ * returns pointer to matrix, NULL if failed
  */
 int **allocateMatrix (int n, int m);
 
 /*
  * allocates a block of n int for a vector
+ * returns pointer to vector, NULL if failed
  */
 int *allocateVector (int n);
 

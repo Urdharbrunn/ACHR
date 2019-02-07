@@ -4,12 +4,13 @@
 ** whose integral text is part of the repository itself
 **
 ** source for sort algorithms on vectors
+** requires duple.h
 **
 ** first created 	03/12/2018 (with older materials)
 ** version 0			03/12/2018
-** last updated		14/01/2019
+** last updated		31/01/2019
 **
-** function count -> 18
+** function count -> 19
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -18,20 +19,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "sort.h"
+#include "duple.h"
 
 void bubbleSort (int *X, int n) { //debugged
 	int flag, i;
 
-	do {
-		flag = 0;
-		for (i=0; i < n; i++) {
-			if (X[i] > X[i+1]) {
-				swap(&X[i], &X[i+1]);
-				flag = 1;
+	if (!X)
+		fprintf(stderr, "!W bubbleSort: array not allocated\n");
+	else {
+		do {
+			flag = 0;
+			for (i=0; i < n; i++) {
+				if (X[i] > X[i+1]) {
+					swap(&X[i], &X[i+1]);
+					flag = 1;
+				}
 			}
-		}
-		n--;
-	} while (flag);
+			n--;
+		} while (flag);
+	}
 	return;
 }
 
@@ -50,15 +56,18 @@ int extractHeap (int *H) { //debugged
 			i = 2*i+1;
 		}
 	}
-	if (2*i == H[0] && H[i] < H[2*1])
+	if (2*i == H[0] && H[i] < H[2*i])
 		swap(&H[i], &H[2*i]);
 	return (m);
 }
-	
+
 int heapSort (int *X, int n) { //debugged
-	int *H = malloc(sizeof(int)*n), i, flag = 0;
+	int *H = NULL, i, flag = 0;
+	H = malloc(sizeof(int)*n);
 	if (!H)
 		fprintf (stderr, "!E heapSort: memory allocation error\n");
+	else if (!X)
+		fprintf(stderr, "!W bubbleSort: array not allocated\n");
 	else {
 		flag = 1;
 		H[0] = 1;
@@ -71,10 +80,41 @@ int heapSort (int *X, int n) { //debugged
 	return (flag);
 }
 
+int heapSortPriority (int *X, int *P, int n) { //debugged
+	int i = 0;
+	duple *D = NULL, *H = NULL, flag;
+	D = malloc(sizeof(duple)*n), H = allocateDupleHeap(n);
+	if (!H || !D)
+		fprintf (stderr, "!E heapSortPriority: memory allocation error\n");
+	else if (!X || !P)
+		fprintf(stderr, "!W heapSortPriority: array not allocated\n");
+	else {
+
+		//initializes the duples with elements to sort and priorities
+		//mergeVectors(D, X, P);
+		for (i=0; i<n; i++) {
+			D[i].x = X[i];
+			D[i].p = P[i];
+		}
+
+		initializeDupleHeap(H, D, n);
+
+		for (i=n-1; i>=0; i--) {
+			flag = extractDupleHeap(H, D);
+			X[i] = flag.x;
+			P[i] = flag.p;
+		}
+		free(H);
+		free(D);
+		i = 1;
+	}
+	return (i);
+}
+
 void insertHeap (int *H, int x) { //debugged
 	int i = H[0];
 	H[i] = x;
-	while ( i>1 && H[i] > H[i/2] ) {
+	while (i>1 && H[i] > H[i/2] ) {
 		swap(&H[i], &H[i/2]);
 		i = i/2;
 	}
@@ -84,31 +124,39 @@ void insertHeap (int *H, int x) { //debugged
 
 void insertionSort (int *X, int n) { //debugged
 	int i, j, x;
-	for (i=1; i<n; i++) {
-		x = X[i];
-		j = i-1;
-		while (j>=0 && X[j] > x) {
-			X[j+1] = X[j];
-			j--;
+	if (!X)
+		fprintf(stderr, "!W insertionSort: array not allocated\n");
+	else {
+		for (i=1; i<n; i++) {
+			x = X[i];
+			j = i-1;
+			while (j>=0 && X[j] > x) {
+				X[j+1] = X[j];
+				j--;
+			}
+			X[j+1] = x;
 		}
-		X[j+1] = x;
 	}
 	return;
 }
 
 void insertionSortPriority(int *X, int *P, int n) { //debugged
 	int i, j, p, x;
-	for (i=1; i<n; i++) {
-		p = P[i];
-		x = X[i];
-		j = i-1;
-		while (j>=0 && P[j] > p) {
-			P[j+1] = P[j];
-			X[j+1] = X[j];
-			j--;
+	if (!X || !P)
+		fprintf(stderr, "!W bubbleSort: array not allocated\n");
+	else {
+		for (i=1; i<n; i++) {
+			p = P[i];
+			x = X[i];
+			j = i-1;
+			while (j>=0 && P[j] > p) {
+				P[j+1] = P[j];
+				X[j+1] = X[j];
+				j--;
+			}
+			P[j+1] = p;
+			X[j+1] = x;
 		}
-		P[j+1] = p;
-		X[j+1] = x;
 	}
 	return;
 }
@@ -171,6 +219,7 @@ int merge (int *X, int p, int q, int r) { //debugged
 		for (k=p; k < r; k++)
 			X[k] = C[k-p];
 	}
+	free(C);
 	return(flag);
 }
 
@@ -288,14 +337,18 @@ void quickSortPriority (int *X, int *P, int k, int n) { //debugged
 
 void selectionSort (int *X, int n) { //debugged
 	int i, max;
-	while (n) {
-		max = 0;
-		for (i=0; i < n; i++) {
-			if (X[i] > X[max])
-				max = i;
+	if (!X)
+		fprintf(stderr, "!W bubbleSort: array not allocated\n");
+	else {
+		while (n) {
+			max = 0;
+			for (i=0; i < n; i++) {
+				if (X[i] > X[max])
+					max = i;
+			}
+			swap(&X[n-1], &X[max]);
+			n--;
 		}
-		swap(&X[n-1], &X[max]);
-		n--;
 	}
 	return;
 }

@@ -4,12 +4,13 @@
 ** whose integral text is part of the repository itself
 **
 ** header for sort algorithms on vectors
+** requires duple.h
 **
 ** first created 	03/12/2018 (with older materials)
 ** version 0			03/12/2018
-** last updated		14/01/2019
+** last updated		31/01/2019
 **
-** function count -> 18
+** function count -> 19
 **
 ** write to dan(dot)salierno(at)stud(dot)uniroma3(dot)it for comments
 ** Daniele Salierno
@@ -35,7 +36,15 @@ int extractHeap (int *H);
 int heapSort (int *X, int n);
 
 /*
- *inserts an element in the heap
+ * applies heap sort on X with priority P
+ * returns 0 if failed to allocate the heap or if X or P are not allocated
+ * otherwise returns 1
+ * note: uses duple
+ */
+int heapSortPriority (int *X, int *P, int n);
+
+/*
+ *inserts an element x in the heap
  */
 void insertHeap (int *H, int x);
 
@@ -49,7 +58,7 @@ void insertionSort (int *X, int n);
  * applies insertion sort to X, ordering elements according to P
  * X_i < X_j iff P_i < P_j
  */
-void insertionSortPriority(int *X, int *P, int n);
+void insertionSortPriority (int *X, int *P, int n);
 
 /*
  * selects the pivot for quick sort by preordering the 3 element 
